@@ -40,17 +40,13 @@
                                    id="config_{{ config.cle }}"
                                    value="{{ config.valeur }}"
                                    class="w-48 rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
-                            <form action="{{ path('app_admin_configuration_delete', {id: config.id}) }}"
-                                  method="post"
-                                  class="inline"
-                                  onsubmit="return confirm('Supprimer ce paramètre ?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ config.id) }}">
-                                <button type="submit" class="text-red-400 hover:text-red-600 p-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
-                                </button>
-                            </form>
+                            <button type="button"
+                                    onclick="document.getElementById('delete-form-{{ config.id }}').submit()"
+                                    class="text-red-400 hover:text-red-600 p-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -70,5 +66,14 @@
             {% endif %}
         </form>
     </div>
+
+    {% for config in configurations %}
+    <form id="delete-form-{{ config.id }}"
+          action="{{ path('app_admin_configuration_delete', {id: config.id}) }}"
+          method="post"
+          onsubmit="return confirm('Supprimer ce parametre ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ config.id) }}">
+    </form>
+    {% endfor %}
 </div>
 {% endblock %}

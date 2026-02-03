@@ -46,11 +46,12 @@
 
                     <div class="mt-4 space-y-2">
                         {% for periode in jourType.periodes %}
-                            <div class="flex items-center text-sm text-gray-600 bg-gray-50 rounded px-2 py-1">
-                                <span class="font-mono text-gray-900">
+                            <div class="flex items-center text-sm rounded px-2 py-1 border"
+                                 style="{{ periode.section.couleurStyle }}">
+                                <span class="font-mono font-medium">
                                     {{ periode.heureDebut|date('H:i') }} - {{ periode.heureFin|date('H:i') }}
                                 </span>
-                                <span class="mx-2 text-gray-400">|</span>
+                                <span class="mx-2 opacity-50">|</span>
                                 <span class="truncate">{{ periode.section.libelle }}</span>
                             </div>
                         {% else %}

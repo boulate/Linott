@@ -33,6 +33,22 @@ class Section
     #[ORM\Column]
     private int $ordre = 0;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $couleur = null;
+
+    public const COULEURS = [
+        'gray' => ['label' => 'Gris', 'bg' => '#F3F4F6', 'text' => '#374151', 'border' => '#D1D5DB'],
+        'brown' => ['label' => 'Marron', 'bg' => '#FEF3C7', 'text' => '#92400E', 'border' => '#D97706'],
+        'orange' => ['label' => 'Orange', 'bg' => '#FFEDD5', 'text' => '#C2410C', 'border' => '#FB923C'],
+        'yellow' => ['label' => 'Jaune', 'bg' => '#FEF9C3', 'text' => '#A16207', 'border' => '#FACC15'],
+        'green' => ['label' => 'Vert', 'bg' => '#DCFCE7', 'text' => '#166534', 'border' => '#4ADE80'],
+        'blue' => ['label' => 'Bleu', 'bg' => '#DBEAFE', 'text' => '#1E40AF', 'border' => '#60A5FA'],
+        'purple' => ['label' => 'Violet', 'bg' => '#F3E8FF', 'text' => '#7C3AED', 'border' => '#A78BFA'],
+        'pink' => ['label' => 'Rose', 'bg' => '#FCE7F3', 'text' => '#BE185D', 'border' => '#F472B6'],
+        'red' => ['label' => 'Rouge', 'bg' => '#FEE2E2', 'text' => '#B91C1C', 'border' => '#F87171'],
+        'teal' => ['label' => 'Turquoise', 'bg' => '#CCFBF1', 'text' => '#0F766E', 'border' => '#2DD4BF'],
+    ];
+
     /**
      * @var Collection<int, Axe1>
      */
@@ -145,5 +161,38 @@ class Section
     public function __toString(): string
     {
         return $this->code . ' - ' . $this->libelle;
+    }
+
+    public function getCouleur(): ?string
+    {
+        return $this->couleur;
+    }
+
+    public function setCouleur(?string $couleur): static
+    {
+        $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    public function getCouleurConfig(): array
+    {
+        if ($this->couleur && isset(self::COULEURS[$this->couleur])) {
+            return self::COULEURS[$this->couleur];
+        }
+
+        return self::COULEURS['gray'];
+    }
+
+    public function getCouleurStyle(): string
+    {
+        $config = $this->getCouleurConfig();
+
+        return sprintf(
+            'background-color: %s; color: %s; border-color: %s;',
+            $config['bg'],
+            $config['text'],
+            $config['border']
+        );
     }
 }

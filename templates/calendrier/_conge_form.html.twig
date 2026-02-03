@@ -37,18 +37,15 @@
         </div>
 
         <div class="flex items-center justify-between pt-4 border-t">
-            {% if isEdit %}
-                <form action="{{ path('app_calendrier_conge_delete', {id: conge.id}) }}"
-                      method="post"
-                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce congé ?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conge.id) }}">
-                    <button type="submit" class="text-red-600 hover:text-red-700 text-sm font-medium">
+            <div>
+                {% if isEdit %}
+                    <button type="button"
+                            onclick="document.getElementById('delete-conge-form').submit()"
+                            class="text-red-600 hover:text-red-700 text-sm font-medium">
                         Supprimer
                     </button>
-                </form>
-            {% else %}
-                <div></div>
-            {% endif %}
+                {% endif %}
+            </div>
 
             <div class="flex gap-3">
                 <button type="button"
@@ -63,4 +60,13 @@
             </div>
         </div>
     {{ form_end(form) }}
+
+    {% if isEdit %}
+    <form id="delete-conge-form"
+          action="{{ path('app_calendrier_conge_delete', {id: conge.id}) }}"
+          method="post"
+          onsubmit="return confirm('Etes-vous sur de vouloir supprimer ce conge ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conge.id) }}">
+    </form>
+    {% endif %}
 </div>

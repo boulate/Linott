@@ -6,21 +6,28 @@
         {{ periode.heureFin|date('H:i') }}
     </td>
     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
+              style="{{ periode.section.couleurStyle }}">
             {{ periode.section.code }}
         </span>
         <span class="text-gray-500 ml-1">{{ periode.section.libelle }}</span>
     </td>
-    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+    <td class="px-4 py-3 whitespace-nowrap text-sm">
         {% if periode.axe1 %}
-            {{ periode.axe1.code }}
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border"
+                  style="{{ periode.section.couleurStyle }}">
+                {{ periode.axe1.code }}
+            </span>
         {% else %}
             <span class="text-gray-300">-</span>
         {% endif %}
     </td>
-    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+    <td class="px-4 py-3 whitespace-nowrap text-sm">
         {% if periode.axe2 %}
-            {{ periode.axe2.code }}
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border"
+                  style="{{ periode.section.couleurStyle }}">
+                {{ periode.axe2.code }}
+            </span>
         {% else %}
             <span class="text-gray-300">-</span>
         {% endif %}

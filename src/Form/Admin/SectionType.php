@@ -5,6 +5,7 @@ namespace App\Form\Admin;
 use App\Entity\Section;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,6 +15,11 @@ class SectionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $couleurChoices = [];
+        foreach (Section::COULEURS as $key => $config) {
+            $couleurChoices[$config['label']] = $key;
+        }
+
         $builder
             ->add('code', TextType::class, [
                 'label' => 'Code',
@@ -26,6 +32,12 @@ class SectionType extends AbstractType
             ->add('ordre', IntegerType::class, [
                 'label' => 'Ordre d\'affichage',
                 'attr' => ['class' => 'form-input'],
+            ])
+            ->add('couleur', ChoiceType::class, [
+                'label' => 'Couleur',
+                'choices' => $couleurChoices,
+                'required' => false,
+                'placeholder' => 'Gris (par defaut)',
             ])
             ->add('actif', CheckboxType::class, [
                 'label' => 'Actif',

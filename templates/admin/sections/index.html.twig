@@ -26,6 +26,7 @@
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Ordre</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Code</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Libellé</th>
+                    <th class="px-4 py-3 text-center text-sm font-medium text-gray-500">Couleur</th>
                     <th class="px-4 py-3 text-center text-sm font-medium text-gray-500">Statut</th>
                     <th class="px-4 py-3 text-right text-sm font-medium text-gray-500">Actions</th>
                 </tr>
@@ -38,6 +39,12 @@
                             <span class="font-mono font-medium text-gray-900">{{ section.code }}</span>
                         </td>
                         <td class="px-4 py-3 text-gray-600">{{ section.libelle }}</td>
+                        <td class="px-4 py-3 text-center">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
+                                  style="{{ section.couleurStyle }}">
+                                {{ section.couleurConfig.label }}
+                            </span>
+                        </td>
                         <td class="px-4 py-3 text-center">
                             {% if section.actif %}
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -58,7 +65,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="5" class="px-4 py-8 text-center text-gray-500">
+                        <td colspan="6" class="px-4 py-8 text-center text-gray-500">
                             Aucune section
                         </td>
                     </tr>
