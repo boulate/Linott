@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Configuration;
 use App\Repository\ConfigurationRepository;
+use App\Service\LabelService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,8 @@ class ConfigurationController extends AbstractController
 
     public function __construct(
         private ConfigurationRepository $configurationRepository,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private LabelService $labelService
     ) {
     }
 
@@ -58,6 +60,58 @@ class ConfigurationController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_modules');
+    }
+
+    #[Route('/labels', name: 'app_admin_labels')]
+    public function labels(): Response
+    {
+        $configKeys = LabelService::getConfigKeys();
+        $defaults = LabelService::getDefaults();
+
+        $labels = [];
+        foreach ($configKeys as $level => $configKey) {
+            $config = $this->configurationRepository->findByCle($configKey);
+            $labels[$level] = [
+                'key' => $configKey,
+                'default' => $defaults[$level],
+                'value' => $config?->getValeur() ?? '',
+                'current' => $this->labelService->getLabel($level),
+            ];
+        }
+
+        return $this->render('admin/configuration/labels.html.twig', [
+            'labels' => $labels,
+        ]);
+    }
+
+    #[Route('/labels/edit', name: 'app_admin_labels_edit', methods: ['POST'])]
+    public function labelsEdit(Request $request): Response
+    {
+        if ($this->isCsrfTokenValid('labels_edit', $request->request->get('_token'))) {
+            $values = $request->request->all('labels');
+            $configKeys = LabelService::getConfigKeys();
+            $descriptions = [
+                'section' => 'Label personnalise pour le niveau Section',
+                'axe1' => 'Label personnalise pour le niveau Axe 1',
+                'axe2' => 'Label personnalise pour le niveau Axe 2',
+                'axe3' => 'Label personnalise pour le niveau Axe 3',
+            ];
+
+            foreach ($configKeys as $level => $configKey) {
+                $value = trim($values[$level] ?? '');
+                // On stocke vide si c'est la valeur par défaut ou vide
+                $this->configurationRepository->setValue(
+                    $configKey,
+                    $value !== '' ? $value : null,
+                    $descriptions[$level]
+                );
+            }
+
+            $this->labelService->clearCache();
+            $this->addFlash('success', 'Noms des axes mis a jour.');
+        }
+
+        return $this->redirectToRoute('app_admin_labels');
     }
 
     #[Route('', name: 'app_admin_configuration')]

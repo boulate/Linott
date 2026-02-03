@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% if isNew %}Nouvel Axe 1{% else %}Modifier {{ axe1.code }}{% endif %} - Administration - Linott{% endblock %}
+{% block title %}{% if isNew %}Nouveau {{ label|default(axe_label('axe1')) }}{% else %}Modifier {{ axe1.code }}{% endif %} - Administration - Linott{% endblock %}
 
 {% block body %}
 {% include 'components/_navbar.html.twig' %}
@@ -11,7 +11,7 @@
     <div class="mb-6">
         <a href="{{ path('app_admin_axes') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Axes analytiques</a>
         <h1 class="text-2xl font-bold text-gray-900">
-            {% if isNew %}Nouvel Axe 1{% else %}Modifier {{ axe1.code }}{% endif %}
+            {% if isNew %}Nouveau {{ label|default(axe_label('axe1')) }}{% else %}Modifier {{ axe1.code }}{% endif %}
         </h1>
     </div>
 

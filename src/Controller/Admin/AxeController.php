@@ -13,6 +13,7 @@ use App\Repository\Axe2Repository;
 use App\Repository\Axe3Repository;
 use App\Repository\ConfigurationRepository;
 use App\Repository\SectionRepository;
+use App\Service\LabelService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,8 @@ class AxeController extends AbstractController
         private Axe1Repository $axe1Repository,
         private Axe2Repository $axe2Repository,
         private Axe3Repository $axe3Repository,
-        private ConfigurationRepository $configurationRepository
+        private ConfigurationRepository $configurationRepository,
+        private LabelService $labelService
     ) {
     }
 
@@ -107,24 +109,24 @@ class AxeController extends AbstractController
         $currentValue = $this->configurationRepository->getValue($key, '1') === '1';
         $newValue = $currentValue ? '0' : '1';
 
-        $descriptions = [
-            'axe1_inherits_section' => 'Axe 1 hérite de Section dans les filtres',
-            'axe2_inherits_axe1' => 'Axe 2 hérite de Axe 1 dans les filtres',
-            'axe3_inherits_axe2' => 'Axe 3 hérite de Axe 2 dans les filtres',
+        $parentLabels = [
+            'axe1' => 'section',
+            'axe2' => 'axe1',
+            'axe3' => 'axe2',
         ];
 
-        $this->configurationRepository->setValue($key, $newValue, $descriptions[$key]);
+        $description = sprintf(
+            '%s hérite de %s dans les filtres',
+            $this->labelService->getLabel($level),
+            $this->labelService->getLabel($parentLabels[$level])
+        );
 
-        $labels = [
-            'axe1' => 'Axe 1',
-            'axe2' => 'Axe 2',
-            'axe3' => 'Axe 3',
-        ];
+        $this->configurationRepository->setValue($key, $newValue, $description);
 
         if ($newValue === '1') {
-            $this->addFlash('success', $labels[$level] . ' hérite maintenant de son parent.');
+            $this->addFlash('success', $this->labelService->getLabel($level) . ' hérite maintenant de son parent.');
         } else {
-            $this->addFlash('success', $labels[$level] . ' est maintenant indépendant.');
+            $this->addFlash('success', $this->labelService->getLabel($level) . ' est maintenant indépendant.');
         }
 
         return $this->redirectToRoute('app_admin_axes');
@@ -157,7 +159,7 @@ class AxeController extends AbstractController
             $this->entityManager->persist($axe1);
             $this->entityManager->flush();
 
-            $this->addFlash('success', 'Axe 1 créé.');
+            $this->addFlash('success', $this->labelService->getLabel('axe1') . ' créé.');
             return $this->redirectToRoute('app_admin_axes');
         }
 
@@ -165,6 +167,7 @@ class AxeController extends AbstractController
             'form' => $form,
             'axe1' => $axe1,
             'isNew' => true,
+            'label' => $this->labelService->getLabel('axe1'),
         ]);
     }
 
@@ -178,7 +181,7 @@ class AxeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $this->addFlash('success', 'Axe 1 modifié.');
+            $this->addFlash('success', $this->labelService->getLabel('axe1') . ' modifié.');
             return $this->redirectToRoute('app_admin_axes');
         }
 
@@ -186,6 +189,7 @@ class AxeController extends AbstractController
             'form' => $form,
             'axe1' => $axe1,
             'isNew' => false,
+            'label' => $this->labelService->getLabel('axe1'),
         ]);
     }
 
@@ -196,7 +200,7 @@ class AxeController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $axe1->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($axe1);
             $this->entityManager->flush();
-            $this->addFlash('success', 'Axe 1 supprimé.');
+            $this->addFlash('success', $this->labelService->getLabel('axe1') . ' supprimé.');
         }
 
         return $this->redirectToRoute('app_admin_axes', ['section' => $sectionId]);
@@ -229,7 +233,7 @@ class AxeController extends AbstractController
             $this->entityManager->persist($axe2);
             $this->entityManager->flush();
 
-            $this->addFlash('success', 'Axe 2 créé.');
+            $this->addFlash('success', $this->labelService->getLabel('axe2') . ' créé.');
             return $this->redirectToRoute('app_admin_axes');
         }
 
@@ -237,6 +241,7 @@ class AxeController extends AbstractController
             'form' => $form,
             'axe2' => $axe2,
             'isNew' => true,
+            'label' => $this->labelService->getLabel('axe2'),
         ]);
     }
 
@@ -250,7 +255,7 @@ class AxeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $this->addFlash('success', 'Axe 2 modifié.');
+            $this->addFlash('success', $this->labelService->getLabel('axe2') . ' modifié.');
             return $this->redirectToRoute('app_admin_axes');
         }
 
@@ -258,6 +263,7 @@ class AxeController extends AbstractController
             'form' => $form,
             'axe2' => $axe2,
             'isNew' => false,
+            'label' => $this->labelService->getLabel('axe2'),
         ]);
     }
 
@@ -269,7 +275,7 @@ class AxeController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $axe2->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($axe2);
             $this->entityManager->flush();
-            $this->addFlash('success', 'Axe 2 supprimé.');
+            $this->addFlash('success', $this->labelService->getLabel('axe2') . ' supprimé.');
         }
 
         return $this->redirectToRoute('app_admin_axes', ['section' => $sectionId, 'axe1' => $axe1Id]);
@@ -302,7 +308,7 @@ class AxeController extends AbstractController
             $this->entityManager->persist($axe3);
             $this->entityManager->flush();
 
-            $this->addFlash('success', 'Axe 3 créé.');
+            $this->addFlash('success', $this->labelService->getLabel('axe3') . ' créé.');
             return $this->redirectToRoute('app_admin_axes');
         }
 
@@ -310,6 +316,7 @@ class AxeController extends AbstractController
             'form' => $form,
             'axe3' => $axe3,
             'isNew' => true,
+            'label' => $this->labelService->getLabel('axe3'),
         ]);
     }
 
@@ -323,7 +330,7 @@ class AxeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $this->addFlash('success', 'Axe 3 modifié.');
+            $this->addFlash('success', $this->labelService->getLabel('axe3') . ' modifié.');
             return $this->redirectToRoute('app_admin_axes');
         }
 
@@ -331,6 +338,7 @@ class AxeController extends AbstractController
             'form' => $form,
             'axe3' => $axe3,
             'isNew' => false,
+            'label' => $this->labelService->getLabel('axe3'),
         ]);
     }
 
@@ -345,7 +353,7 @@ class AxeController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $axe3->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($axe3);
             $this->entityManager->flush();
-            $this->addFlash('success', 'Axe 3 supprimé.');
+            $this->addFlash('success', $this->labelService->getLabel('axe3') . ' supprimé.');
         }
 
         return $this->redirectToRoute('app_admin_axes', ['section' => $sectionId, 'axe1' => $axe1Id, 'axe2' => $axe2Id]);

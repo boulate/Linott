@@ -17,7 +17,7 @@
     <div class="bg-white rounded-lg shadow p-4 mb-6">
         <form method="get" class="flex flex-wrap items-end gap-4">
             <div>
-                <label for="section" class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+                <label for="section" class="block text-sm font-medium text-gray-700 mb-1">{{ axe_label('section') }}</label>
                 <select name="section" id="section"
                         onchange="this.form.submit()"
                         class="rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
@@ -36,7 +36,7 @@
         <div class="bg-white rounded-lg shadow">
             <div class="px-4 py-3 border-b bg-gray-50">
                 <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-gray-900">Axe 1</h3>
+                    <h3 class="font-semibold text-gray-900">{{ axe_label('axe1') }}</h3>
                     {% if selectedSection %}
                         <a href="{{ path('app_admin_axe1_new', {section: selectedSection.id}) }}"
                            class="text-primary-600 hover:text-primary-700 text-sm font-medium">
@@ -53,7 +53,7 @@
                     <button type="submit" class="text-xs flex items-center gap-1 {% if axe1InheritsSection %}text-green-600{% else %}text-gray-400{% endif %}">
                         {% if axe1InheritsSection %}
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                            Filtre par Section
+                            Filtre par {{ axe_label('section') }}
                         {% else %}
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
                             Independant
@@ -79,9 +79,9 @@
                 {% else %}
                     <div class="px-4 py-8 text-center text-gray-500 text-sm">
                         {% if selectedSection %}
-                            Aucun axe 1 pour cette section
+                            Aucun {{ axe_label('axe1')|lower }} pour cette {{ axe_label('section')|lower }}
                         {% else %}
-                            Sélectionnez une section
+                            Selectionnez une {{ axe_label('section')|lower }}
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -92,7 +92,7 @@
         <div class="bg-white rounded-lg shadow">
             <div class="px-4 py-3 border-b bg-gray-50">
                 <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-gray-900">Axe 2</h3>
+                    <h3 class="font-semibold text-gray-900">{{ axe_label('axe2') }}</h3>
                     {% if selectedAxe1 %}
                         <a href="{{ path('app_admin_axe2_new', {axe1: selectedAxe1.id}) }}"
                            class="text-primary-600 hover:text-primary-700 text-sm font-medium">
@@ -109,7 +109,7 @@
                     <button type="submit" class="text-xs flex items-center gap-1 {% if axe2InheritsAxe1 %}text-green-600{% else %}text-gray-400{% endif %}">
                         {% if axe2InheritsAxe1 %}
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                            Filtre par Axe 1
+                            Filtre par {{ axe_label('axe1') }}
                         {% else %}
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
                             Independant
@@ -135,9 +135,9 @@
                 {% else %}
                     <div class="px-4 py-8 text-center text-gray-500 text-sm">
                         {% if selectedAxe1 %}
-                            Aucun axe 2 pour cet axe 1
+                            Aucun {{ axe_label('axe2')|lower }} pour cet {{ axe_label('axe1')|lower }}
                         {% else %}
-                            Sélectionnez un axe 1
+                            Selectionnez un {{ axe_label('axe1')|lower }}
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -148,7 +148,7 @@
         <div class="bg-white rounded-lg shadow">
             <div class="px-4 py-3 border-b bg-gray-50">
                 <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-gray-900">Axe 3</h3>
+                    <h3 class="font-semibold text-gray-900">{{ axe_label('axe3') }}</h3>
                     {% if selectedAxe2 %}
                         <a href="{{ path('app_admin_axe3_new', {axe2: selectedAxe2.id}) }}"
                            class="text-primary-600 hover:text-primary-700 text-sm font-medium">
@@ -165,7 +165,7 @@
                     <button type="submit" class="text-xs flex items-center gap-1 {% if axe3InheritsAxe2 %}text-green-600{% else %}text-gray-400{% endif %}">
                         {% if axe3InheritsAxe2 %}
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                            Filtre par Axe 2
+                            Filtre par {{ axe_label('axe2') }}
                         {% else %}
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
                             Independant
@@ -190,9 +190,9 @@
                 {% else %}
                     <div class="px-4 py-8 text-center text-gray-500 text-sm">
                         {% if selectedAxe2 %}
-                            Aucun axe 3 pour cet axe 2
+                            Aucun {{ axe_label('axe3')|lower }} pour cet {{ axe_label('axe2')|lower }}
                         {% else %}
-                            Sélectionnez un axe 2
+                            Selectionnez un {{ axe_label('axe2')|lower }}
                         {% endif %}
                     </div>
                 {% endfor %}

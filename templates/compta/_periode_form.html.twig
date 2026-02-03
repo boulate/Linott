@@ -62,13 +62,13 @@
 
                 {# Section #}
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Section</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">{{ axe_label('section') }}</label>
                     <div class="relative">
                         <select name="{{ form.section.vars.full_name }}"
                                 x-model="selectedSection"
                                 @change="onSelectSection($event.target.value)"
                                 class="form-select w-full">
-                            <option value="">-- Choisir une section --</option>
+                            <option value="">{{ axe_placeholder('section') }}</option>
                             {% for section in axesData.sections %}
                                 <option value="{{ section.id }}">{{ section.code }} - {{ section.libelle }}</option>
                             {% endfor %}
@@ -84,14 +84,14 @@
 
                 {# Axe 1 #}
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Axe 1</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">{{ axe_label('axe1') }}</label>
                     <div class="relative">
                         <select name="{{ form.axe1.vars.full_name }}"
                                 x-model="selectedAxe1"
                                 @change="onSelectAxe1($event.target.value)"
                                 x-ref="axe1Select"
                                 class="form-select w-full">
-                            <option value="">-- Choisir un axe 1 --</option>
+                            <option value="">{{ axe_placeholder('axe1') }}</option>
                             {% for axe1 in axesData.axes1 %}
                                 <option value="{{ axe1.id }}" data-section="{{ axe1.sectionId }}">{{ axe1.code }} - {{ axe1.libelle }}</option>
                             {% endfor %}
@@ -107,14 +107,14 @@
 
                 {# Axe 2 #}
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Axe 2</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">{{ axe_label('axe2') }}</label>
                     <div class="relative">
                         <select name="{{ form.axe2.vars.full_name }}"
                                 x-model="selectedAxe2"
                                 @change="onSelectAxe2($event.target.value)"
                                 x-ref="axe2Select"
                                 class="form-select w-full">
-                            <option value="">-- Choisir un axe 2 --</option>
+                            <option value="">{{ axe_placeholder('axe2') }}</option>
                             {% for axe2 in axesData.axes2 %}
                                 <option value="{{ axe2.id }}" data-axe1="{{ axe2.axe1Id }}">{{ axe2.code }} - {{ axe2.libelle }}</option>
                             {% endfor %}
@@ -130,14 +130,14 @@
 
                 {# Axe 3 #}
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Axe 3</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">{{ axe_label('axe3') }}</label>
                     <div class="relative">
                         <select name="{{ form.axe3.vars.full_name }}"
                                 x-model="selectedAxe3"
                                 @change="onSelectAxe3($event.target.value)"
                                 x-ref="axe3Select"
                                 class="form-select w-full">
-                            <option value="">-- Choisir un axe 3 --</option>
+                            <option value="">{{ axe_placeholder('axe3') }}</option>
                             {% for axe3 in axesData.axes3 %}
                                 <option value="{{ axe3.id }}" data-axe2="{{ axe3.axe2Id }}">{{ axe3.code }} - {{ axe3.libelle }}</option>
                             {% endfor %}

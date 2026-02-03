@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Noms des axes - Administration - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="mb-6">
+        <a href="{{ path('app_admin') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Administration</a>
+        <h1 class="text-2xl font-bold text-gray-900">Noms des axes analytiques</h1>
+        <p class="text-gray-500 mt-1">Personnalisez les noms des niveaux pour coller a votre vocabulaire metier</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow">
+        <form action="{{ path('app_admin_labels_edit') }}" method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token('labels_edit') }}">
+
+            <div class="divide-y divide-gray-200">
+                {% for level, label in labels %}
+                    <div class="p-4 hover:bg-gray-50">
+                        <div class="flex items-center gap-4">
+                            <div class="w-32 shrink-0">
+                                <span class="text-sm font-medium text-gray-500">{{ label.default }}</span>
+                            </div>
+                            <div class="flex-1">
+                                <input type="text"
+                                       name="labels[{{ level }}]"
+                                       value="{{ label.value }}"
+                                       placeholder="{{ label.default }}"
+                                       class="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div class="w-32 text-right shrink-0">
+                                <span class="text-sm text-gray-400">
+                                    {% if label.value %}
+                                        Actuel : <span class="font-medium text-gray-700">{{ label.current }}</span>
+                                    {% else %}
+                                        (par defaut)
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-b-lg flex items-center justify-between">
+                <p class="text-sm text-gray-500">
+                    Laissez vide pour utiliser le nom par defaut
+                </p>
+                <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700">
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <h3 class="text-sm font-medium text-blue-800 mb-2">Exemples d'utilisation</h3>
+        <ul class="text-sm text-blue-700 space-y-1">
+            <li><strong>Section</strong> : Projet, Client, Departement, Service...</li>
+            <li><strong>Axe 1</strong> : Activite, Mission, Tache, Phase...</li>
+            <li><strong>Axe 2</strong> : Sous-activite, Lot, Action...</li>
+            <li><strong>Axe 3</strong> : Detail, Sous-tache, Operation...</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

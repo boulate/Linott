@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Repository\Axe1Repository;
 use App\Repository\Axe2Repository;
 use App\Repository\Axe3Repository;
+use App\Service\LabelService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,8 @@ class AxeController extends AbstractController
     public function __construct(
         private Axe1Repository $axe1Repository,
         private Axe2Repository $axe2Repository,
-        private Axe3Repository $axe3Repository
+        private Axe3Repository $axe3Repository,
+        private LabelService $labelService
     ) {
     }
 
@@ -33,8 +35,8 @@ class AxeController extends AbstractController
 
         return $this->render('compta/_select_options.html.twig', [
             'name' => 'periode[axe1]',
-            'label' => 'Axe 1',
-            'placeholder' => '-- Choisir un axe 1 --',
+            'label' => $this->labelService->getLabel('axe1'),
+            'placeholder' => $this->labelService->getPlaceholder('axe1'),
             'options' => $axes1,
             'dataAttribute' => 'axe1',
             'htmxTarget' => '#axe2-container',
@@ -56,8 +58,8 @@ class AxeController extends AbstractController
 
         return $this->render('compta/_select_options.html.twig', [
             'name' => 'periode[axe2]',
-            'label' => 'Axe 2',
-            'placeholder' => '-- Choisir un axe 2 --',
+            'label' => $this->labelService->getLabel('axe2'),
+            'placeholder' => $this->labelService->getPlaceholder('axe2'),
             'options' => $axes2,
             'dataAttribute' => 'axe2',
             'htmxTarget' => '#axe3-container',
@@ -79,8 +81,8 @@ class AxeController extends AbstractController
 
         return $this->render('compta/_select_options.html.twig', [
             'name' => 'periode[axe3]',
-            'label' => 'Axe 3',
-            'placeholder' => '-- Choisir un axe 3 --',
+            'label' => $this->labelService->getLabel('axe3'),
+            'placeholder' => $this->labelService->getPlaceholder('axe3'),
             'options' => $axes3,
             'dataAttribute' => 'axe3',
         ]);
