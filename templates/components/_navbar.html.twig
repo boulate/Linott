@@ -15,7 +15,7 @@
                         {% endif %}
                         <a href="{{ path('app_compta') }}"
                            class="{% if current|default('') == 'compta' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
-                            Compta
+                            Ventilation analytique
                         </a>
                         {% if config_bool('module_calendrier') %}
                         <a href="{{ path('app_calendrier') }}"
