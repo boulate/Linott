@@ -13,10 +13,51 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/admin/configuration')]
 class ConfigurationController extends AbstractController
 {
+    private const MODULES = [
+        'module_dashboard' => ['label' => 'Tableau de bord', 'description' => 'Page d\'accueil avec statistiques'],
+        'module_calendrier' => ['label' => 'Calendrier', 'description' => 'Gestion des conges et absences'],
+        'module_stats' => ['label' => 'Statistiques', 'description' => 'Rapports et visualisations'],
+    ];
+
     public function __construct(
         private ConfigurationRepository $configurationRepository,
         private EntityManagerInterface $entityManager
     ) {
+    }
+
+    #[Route('/modules', name: 'app_admin_modules')]
+    public function modules(): Response
+    {
+        $modules = [];
+        foreach (self::MODULES as $cle => $info) {
+            $config = $this->configurationRepository->findByCle($cle);
+            $modules[$cle] = [
+                'label' => $info['label'],
+                'description' => $info['description'],
+                'actif' => $config ? $config->getValeurAsBool() : false,
+            ];
+        }
+
+        return $this->render('admin/configuration/modules.html.twig', [
+            'modules' => $modules,
+        ]);
+    }
+
+    #[Route('/modules/edit', name: 'app_admin_modules_edit', methods: ['POST'])]
+    public function modulesEdit(Request $request): Response
+    {
+        if ($this->isCsrfTokenValid('modules_edit', $request->request->get('_token'))) {
+            $activeModules = $request->request->all('modules');
+
+            foreach (self::MODULES as $cle => $info) {
+                $valeur = isset($activeModules[$cle]) ? '1' : '0';
+                $this->configurationRepository->setValue($cle, $valeur, $info['description']);
+            }
+
+            $this->addFlash('success', 'Modules mis a jour.');
+        }
+
+        return $this->redirectToRoute('app_admin_modules');
     }
 
     #[Route('', name: 'app_admin_configuration')]

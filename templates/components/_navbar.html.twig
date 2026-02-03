@@ -7,18 +7,28 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
+                        {% if config_bool('module_dashboard') %}
+                        <a href="{{ path('app_dashboard') }}"
+                           class="{% if current|default('') == 'dashboard' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
+                            Tableau de bord
+                        </a>
+                        {% endif %}
                         <a href="{{ path('app_compta') }}"
                            class="{% if current|default('') == 'compta' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
                             Compta
                         </a>
+                        {% if config_bool('module_calendrier') %}
                         <a href="{{ path('app_calendrier') }}"
                            class="{% if current|default('') == 'calendrier' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
                             Calendrier
                         </a>
+                        {% endif %}
+                        {% if config_bool('module_stats') %}
                         <a href="{{ path('app_stats') }}"
                            class="{% if current|default('') == 'stats' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
                             Stats
                         </a>
+                        {% endif %}
                         {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('app_admin') }}"
                            class="{% if current|default('') == 'admin' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
