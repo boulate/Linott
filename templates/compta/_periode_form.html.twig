@@ -28,7 +28,17 @@
                 'hx-target': hxTarget|default('#fiche-container'),
                 'hx-swap': 'innerHTML',
                 'hx-on::after-request': "if(event.detail.successful && event.detail.requestConfig.verb === 'post') document.getElementById('modal-container').innerHTML = ''",
-                'onkeydown': "if(event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') { event.preventDefault(); this.requestSubmit(); }"
+                'onkeydown': "if(event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') { event.preventDefault(); this.requestSubmit(); }",
+                'x-data': 'periodeAxesSelector(' ~ ({
+                    sections: axesData.sections,
+                    axes1: axesData.axes1,
+                    axes2: axesData.axes2,
+                    axes3: axesData.axes3,
+                    initialSection: form.section.vars.value|default(''),
+                    initialAxe1: form.axe1.vars.value|default(''),
+                    initialAxe2: form.axe2.vars.value|default(''),
+                    initialAxe3: form.axe3.vars.value|default('')
+                }|json_encode|raw) ~ ')'
             }}) }}
 
             <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
@@ -49,18 +59,20 @@
                     </div>
                 </div>
 
-                <div class="mb-6" x-data="{ selected: false }" x-init="selected = $refs.select.value !== ''">
-                    {{ form_label(form.section, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+                {# Section #}
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Section</label>
                     <div class="relative">
-                        {{ form_widget(form.section, {attr: {
-                            'x-ref': 'select',
-                            '@change': "selected = $el.value !== ''",
-                            'hx-get': path('api_axes1'),
-                            'hx-target': '#axe1-container',
-                            'hx-include': 'this',
-                            'hx-trigger': 'change'
-                        }}) }}
-                        <div x-show="selected" class="absolute right-8 top-1/2 -translate-y-1/2 text-green-500 pointer-events-none">
+                        <select name="{{ form.section.vars.full_name }}"
+                                x-model="selectedSection"
+                                @change="onSelectSection($event.target.value)"
+                                class="form-select w-full">
+                            <option value="">-- Choisir une section --</option>
+                            {% for section in axesData.sections %}
+                                <option value="{{ section.id }}">{{ section.code }} - {{ section.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                        <div x-show="selectedSection" class="absolute right-8 top-1/2 -translate-y-1/2 text-green-500 pointer-events-none">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
@@ -69,36 +81,71 @@
                     {{ form_errors(form.section) }}
                 </div>
 
-                <div id="axe1-container" class="mb-6">
-                    {{ form_label(form.axe1, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+                {# Axe 1 #}
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Axe 1</label>
                     <div class="relative">
-                        {{ form_widget(form.axe1, {attr: {
-                            'hx-get': path('api_axes2'),
-                            'hx-target': '#axe2-container',
-                            'hx-include': 'this',
-                            'hx-trigger': 'change'
-                        }}) }}
+                        <select name="{{ form.axe1.vars.full_name }}"
+                                x-model="selectedAxe1"
+                                @change="onSelectAxe1($event.target.value)"
+                                x-ref="axe1Select"
+                                class="form-select w-full">
+                            <option value="">-- Choisir un axe 1 --</option>
+                            {% for axe1 in axesData.axes1 %}
+                                <option value="{{ axe1.id }}" data-section="{{ axe1.sectionId }}">{{ axe1.code }} - {{ axe1.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                        <div x-show="selectedAxe1" class="absolute right-8 top-1/2 -translate-y-1/2 text-green-500 pointer-events-none">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
                     </div>
                     {{ form_errors(form.axe1) }}
                 </div>
 
-                <div id="axe2-container" class="mb-6">
-                    {{ form_label(form.axe2, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+                {# Axe 2 #}
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Axe 2</label>
                     <div class="relative">
-                        {{ form_widget(form.axe2, {attr: {
-                            'hx-get': path('api_axes3'),
-                            'hx-target': '#axe3-container',
-                            'hx-include': 'this',
-                            'hx-trigger': 'change'
-                        }}) }}
+                        <select name="{{ form.axe2.vars.full_name }}"
+                                x-model="selectedAxe2"
+                                @change="onSelectAxe2($event.target.value)"
+                                x-ref="axe2Select"
+                                class="form-select w-full">
+                            <option value="">-- Choisir un axe 2 --</option>
+                            {% for axe2 in axesData.axes2 %}
+                                <option value="{{ axe2.id }}" data-axe1="{{ axe2.axe1Id }}">{{ axe2.code }} - {{ axe2.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                        <div x-show="selectedAxe2" class="absolute right-8 top-1/2 -translate-y-1/2 text-green-500 pointer-events-none">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
                     </div>
                     {{ form_errors(form.axe2) }}
                 </div>
 
-                <div id="axe3-container" class="mb-6">
-                    {{ form_label(form.axe3, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+                {# Axe 3 #}
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Axe 3</label>
                     <div class="relative">
-                        {{ form_widget(form.axe3) }}
+                        <select name="{{ form.axe3.vars.full_name }}"
+                                x-model="selectedAxe3"
+                                @change="onSelectAxe3($event.target.value)"
+                                x-ref="axe3Select"
+                                class="form-select w-full">
+                            <option value="">-- Choisir un axe 3 --</option>
+                            {% for axe3 in axesData.axes3 %}
+                                <option value="{{ axe3.id }}" data-axe2="{{ axe3.axe2Id }}">{{ axe3.code }} - {{ axe3.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                        <div x-show="selectedAxe3" class="absolute right-8 top-1/2 -translate-y-1/2 text-green-500 pointer-events-none">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
                     </div>
                     {{ form_errors(form.axe3) }}
                 </div>
@@ -108,6 +155,12 @@
                     {{ form_widget(form.commentaire) }}
                     {{ form_errors(form.commentaire) }}
                 </div>
+
+                {# Mark axes fields as rendered since we handle them manually #}
+                {% do form.section.setRendered() %}
+                {% do form.axe1.setRendered() %}
+                {% do form.axe2.setRendered() %}
+                {% do form.axe3.setRendered() %}
 
                 {{ form_rest(form) }}
             </div>

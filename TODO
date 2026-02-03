@@ -16,3 +16,16 @@
 2F4 : J'ai besoin de me connecter à l'API du logiciel LUCCA pour aller chercher les informations d'absence (congé, maladie, RTT, temps partiel, etc.) des salariés. Aides moi à développer dans l'interface admin une zone qui permet de connecter un utilisateur au salarié qui lui correspond.
 2F4 : Il faut que les données de Lucca pour un salarié permettent de remplir automatiquement les jours des utilisateurs liés à ce compte salarié. Exemple il est en congé le 02/02/2026 dans Lucca et a un contrat 39h -> 39/5 heures (donc 7.8) heures sur le 02/02/2026 avec le label "Congés" de Linott (il faudra donc pouvoir "lier" chaque type d'absence à un combo "section / axe1 / axe2 / axe3" dans l'administration également).
 3F1 : Revoir la section administration pour séparer les liens par sections (Gestion des utilisateurs et equipes, une section pour la gestion des congés et des journées types, regrouper la gestion des sections et celle des axes, etc.)
+2F3 : Possibilité de pouvoir décoréller un des axes de ses parents (exemple : axe3 devient indépendant et n'est filtré par ni section, ni axe1, ni axe 2).
+
+
+
+Je me suis mal exprimé : Section est le parent de Axe 1 qui est le parent de Axe 2 qui est le parent de Axe 3.
+On est sur une relation 1 vers n.
+Chaque enfant a un seul parent.
+Chaque parent a plusieurs enfants.
+Quand aucun parent n'est selectionné, je veux que tous les enfants apparaissent. Ca me permet par exemple de trouver rapidement ce que je veux dans axe2, et de voir axe1 et section se remplir. Il ne me reste alors plus que axe3 à renseigner.
+Si je selectionne un parent, seuls ses enfants possibles apparaissent.
+Si je selectionne un enfant, tous ses parents se selectionnent automatiquement.
+Travaillons ensemble à la réflexion sur la meilleure facon d'implémenter cela, l'argorithme à mettre en place, etc.
+J'ai beoin qu'on réfléchisse PROPREMENT avant de faire du code.

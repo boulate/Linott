@@ -67,8 +67,10 @@ class PeriodeType extends AbstractType
             ]);
 
         $formModifier = function (FormInterface $form, ?Section $section, ?Axe1 $axe1, ?Axe2 $axe2): void {
-            // Axe1 depends on Section
-            $axes1 = $section ? $this->axe1Repository->findBySection($section) : [];
+            // Axe1 : filtré par section si sélectionnée, sinon tous les actifs
+            $axes1 = $section
+                ? $this->axe1Repository->findBySection($section)
+                : $this->axe1Repository->findAllActive();
             $form->add('axe1', EntityType::class, [
                 'class' => Axe1::class,
                 'choice_label' => function (Axe1 $axe1) {
@@ -84,8 +86,10 @@ class PeriodeType extends AbstractType
                 ],
             ]);
 
-            // Axe2 depends on Axe1
-            $axes2 = $axe1 ? $this->axe2Repository->findByAxe1($axe1) : [];
+            // Axe2 : filtré par axe1 si sélectionné, sinon tous les actifs
+            $axes2 = $axe1
+                ? $this->axe2Repository->findByAxe1($axe1)
+                : $this->axe2Repository->findAllActive();
             $form->add('axe2', EntityType::class, [
                 'class' => Axe2::class,
                 'choice_label' => function (Axe2 $axe2) {
@@ -101,8 +105,10 @@ class PeriodeType extends AbstractType
                 ],
             ]);
 
-            // Axe3 depends on Axe2
-            $axes3 = $axe2 ? $this->axe3Repository->findByAxe2($axe2) : [];
+            // Axe3 : filtré par axe2 si sélectionné, sinon tous les actifs
+            $axes3 = $axe2
+                ? $this->axe3Repository->findByAxe2($axe2)
+                : $this->axe3Repository->findAllActive();
             $form->add('axe3', EntityType::class, [
                 'class' => Axe3::class,
                 'choice_label' => function (Axe3 $axe3) {

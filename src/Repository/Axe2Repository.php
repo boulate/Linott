@@ -54,4 +54,18 @@ class Axe2Repository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @return Axe2[]
+     */
+    public function findAllActive(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.actif = :actif')
+            ->setParameter('actif', true)
+            ->orderBy('a.ordre', 'ASC')
+            ->addOrderBy('a.libelle', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

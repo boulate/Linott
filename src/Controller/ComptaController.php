@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\PeriodeType;
 use App\Repository\JourTypeRepository;
 use App\Repository\PeriodeRepository;
+use App\Service\AxeDataService;
 use App\Service\ComptaService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +24,8 @@ class ComptaController extends AbstractController
         private ComptaService $comptaService,
         private PeriodeRepository $periodeRepository,
         private JourTypeRepository $jourTypeRepository,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private AxeDataService $axeDataService
     ) {
     }
 
@@ -96,6 +98,7 @@ class ComptaController extends AbstractController
                     'periode' => $periode,
                     'date' => $currentDate,
                     'isEdit' => false,
+                    'axesData' => $this->axeDataService->getAllAxesData(),
                 ]);
             }
 
@@ -114,6 +117,7 @@ class ComptaController extends AbstractController
             'periode' => $periode,
             'date' => $currentDate,
             'isEdit' => false,
+            'axesData' => $this->axeDataService->getAllAxesData(),
         ]);
     }
 
@@ -141,6 +145,7 @@ class ComptaController extends AbstractController
                     'periode' => $periode,
                     'date' => $periode->getDate(),
                     'isEdit' => true,
+                    'axesData' => $this->axeDataService->getAllAxesData(),
                 ]);
             }
 
@@ -158,6 +163,7 @@ class ComptaController extends AbstractController
             'periode' => $periode,
             'date' => $periode->getDate(),
             'isEdit' => true,
+            'axesData' => $this->axeDataService->getAllAxesData(),
         ]);
     }
 

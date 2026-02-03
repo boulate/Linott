@@ -7,6 +7,7 @@ use App\Entity\JourTypePeriode;
 use App\Form\JourTypePeriodeSingleType;
 use App\Form\JourTypeType;
 use App\Repository\JourTypeRepository;
+use App\Service\AxeDataService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,8 @@ class JourTypeController extends AbstractController
 {
     public function __construct(
         private JourTypeRepository $jourTypeRepository,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private AxeDataService $axeDataService
     ) {
     }
 
@@ -167,6 +169,7 @@ class JourTypeController extends AbstractController
             'form' => $form,
             'isEdit' => false,
             'hxTarget' => '#periodes-list',
+            'axesData' => $this->axeDataService->getAllAxesData(),
         ]);
     }
 
@@ -199,6 +202,7 @@ class JourTypeController extends AbstractController
             'form' => $form,
             'isEdit' => true,
             'hxTarget' => '#periodes-list',
+            'axesData' => $this->axeDataService->getAllAxesData(),
         ]);
     }
 
