@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\JourType;
 use App\Entity\Periode;
 use App\Entity\User;
 use App\Repository\PeriodeRepository;
@@ -11,6 +12,34 @@ class ComptaService
     public function __construct(
         private PeriodeRepository $periodeRepository
     ) {
+    }
+
+    /**
+     * Applique un modèle de jour type pour créer des périodes.
+     *
+     * @return Periode[]
+     */
+    public function applyJourType(User $user, JourType $jourType, \DateTimeImmutable $date): array
+    {
+        $newPeriodes = [];
+
+        foreach ($jourType->getPeriodes() as $template) {
+            $periode = new Periode();
+            $periode->setUser($user);
+            $periode->setDate($date);
+            $periode->setHeureDebut($template->getHeureDebut());
+            $periode->setHeureFin($template->getHeureFin());
+            $periode->setSection($template->getSection());
+            $periode->setAxe1($template->getAxe1());
+            $periode->setAxe2($template->getAxe2());
+            $periode->setAxe3($template->getAxe3());
+            $periode->setCommentaire($template->getCommentaire());
+            $periode->setValidee(false);
+
+            $newPeriodes[] = $periode;
+        }
+
+        return $newPeriodes;
     }
 
     public function calculateTotalMinutes(array $periodes): int

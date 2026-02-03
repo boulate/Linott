@@ -6,7 +6,8 @@
       "Bash(docker compose build:*)",
       "Bash(docker compose:*)",
       "Bash(sudo chown:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(wc:*)"
     ]
   }
 }

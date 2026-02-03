@@ -7,6 +7,8 @@ use App\Entity\Axe2;
 use App\Entity\Axe3;
 use App\Entity\Configuration;
 use App\Entity\Conge;
+use App\Entity\JourType;
+use App\Entity\JourTypePeriode;
 use App\Entity\Periode;
 use App\Entity\Section;
 use App\Entity\TypeConge;
@@ -29,6 +31,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
         $this->loadSections($manager);
         $this->loadTypesConge($manager);
         $this->loadConfiguration($manager);
+        $this->loadJourTypes($manager);
         $this->loadExampleData($manager);
 
         $manager->flush();
@@ -223,6 +226,119 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             $config->setDescription($data['description']);
             $manager->persist($config);
         }
+
+        $manager->flush();
+    }
+
+    private function loadJourTypes(ObjectManager $manager): void
+    {
+        $user = $this->getReference(UserFixtures::USER_REFERENCE, User::class);
+        $sectionProd = $this->getReference('section_PROD', Section::class);
+        $sectionAdmin = $this->getReference('section_ADMIN', Section::class);
+        $axe1Dev = $this->getReference('axe1_DEV', Axe1::class);
+        $axe1Admin = $this->getReference('axe1_admin_COMPTA', Axe1::class);
+        $axe2Back = $this->getReference('axe2_BACK', Axe2::class);
+
+        // Modele partage global: Journee standard 7h
+        $jourTypeStandard = new JourType();
+        $jourTypeStandard->setNom('Journee standard 7h');
+        $jourTypeStandard->setDescription('Journee type de 7 heures avec pause dejeuner');
+        $jourTypeStandard->setUser(null);
+        $jourTypeStandard->setPartage(true);
+        $jourTypeStandard->setActif(true);
+        $jourTypeStandard->setOrdre(1);
+
+        $periodeMatin = new JourTypePeriode();
+        $periodeMatin->setHeureDebut(new \DateTimeImmutable('09:00'));
+        $periodeMatin->setHeureFin(new \DateTimeImmutable('12:00'));
+        $periodeMatin->setSection($sectionProd);
+        $periodeMatin->setOrdre(1);
+        $jourTypeStandard->addPeriode($periodeMatin);
+
+        $periodeApresMidi = new JourTypePeriode();
+        $periodeApresMidi->setHeureDebut(new \DateTimeImmutable('14:00'));
+        $periodeApresMidi->setHeureFin(new \DateTimeImmutable('18:00'));
+        $periodeApresMidi->setSection($sectionProd);
+        $periodeApresMidi->setOrdre(2);
+        $jourTypeStandard->addPeriode($periodeApresMidi);
+
+        $manager->persist($jourTypeStandard);
+
+        // Modele partage global: Demi-journee matin
+        $jourTypeMatin = new JourType();
+        $jourTypeMatin->setNom('Demi-journee matin');
+        $jourTypeMatin->setDescription('Travail le matin uniquement');
+        $jourTypeMatin->setUser(null);
+        $jourTypeMatin->setPartage(true);
+        $jourTypeMatin->setActif(true);
+        $jourTypeMatin->setOrdre(2);
+
+        $periodeMatin2 = new JourTypePeriode();
+        $periodeMatin2->setHeureDebut(new \DateTimeImmutable('09:00'));
+        $periodeMatin2->setHeureFin(new \DateTimeImmutable('12:30'));
+        $periodeMatin2->setSection($sectionProd);
+        $periodeMatin2->setOrdre(1);
+        $jourTypeMatin->addPeriode($periodeMatin2);
+
+        $manager->persist($jourTypeMatin);
+
+        // Modele personnel pour l'utilisateur: Journee dev backend
+        $jourTypeDevBack = new JourType();
+        $jourTypeDevBack->setNom('Journee dev backend');
+        $jourTypeDevBack->setDescription('Ma journee type de developpement backend');
+        $jourTypeDevBack->setUser($user);
+        $jourTypeDevBack->setPartage(false);
+        $jourTypeDevBack->setActif(true);
+        $jourTypeDevBack->setOrdre(1);
+
+        $periodeDevMatin = new JourTypePeriode();
+        $periodeDevMatin->setHeureDebut(new \DateTimeImmutable('09:00'));
+        $periodeDevMatin->setHeureFin(new \DateTimeImmutable('12:00'));
+        $periodeDevMatin->setSection($sectionProd);
+        $periodeDevMatin->setAxe1($axe1Dev);
+        $periodeDevMatin->setAxe2($axe2Back);
+        $periodeDevMatin->setCommentaire('Dev backend matin');
+        $periodeDevMatin->setOrdre(1);
+        $jourTypeDevBack->addPeriode($periodeDevMatin);
+
+        $periodeDevAprem = new JourTypePeriode();
+        $periodeDevAprem->setHeureDebut(new \DateTimeImmutable('14:00'));
+        $periodeDevAprem->setHeureFin(new \DateTimeImmutable('18:00'));
+        $periodeDevAprem->setSection($sectionProd);
+        $periodeDevAprem->setAxe1($axe1Dev);
+        $periodeDevAprem->setAxe2($axe2Back);
+        $periodeDevAprem->setCommentaire('Dev backend aprem');
+        $periodeDevAprem->setOrdre(2);
+        $jourTypeDevBack->addPeriode($periodeDevAprem);
+
+        $manager->persist($jourTypeDevBack);
+
+        // Modele personnel: Journee mixte dev + admin
+        $jourTypeMixte = new JourType();
+        $jourTypeMixte->setNom('Journee mixte dev/admin');
+        $jourTypeMixte->setDescription('Moitie dev, moitie administratif');
+        $jourTypeMixte->setUser($user);
+        $jourTypeMixte->setPartage(false);
+        $jourTypeMixte->setActif(true);
+        $jourTypeMixte->setOrdre(2);
+
+        $periodeMixte1 = new JourTypePeriode();
+        $periodeMixte1->setHeureDebut(new \DateTimeImmutable('09:00'));
+        $periodeMixte1->setHeureFin(new \DateTimeImmutable('12:00'));
+        $periodeMixte1->setSection($sectionProd);
+        $periodeMixte1->setAxe1($axe1Dev);
+        $periodeMixte1->setOrdre(1);
+        $jourTypeMixte->addPeriode($periodeMixte1);
+
+        $periodeMixte2 = new JourTypePeriode();
+        $periodeMixte2->setHeureDebut(new \DateTimeImmutable('14:00'));
+        $periodeMixte2->setHeureFin(new \DateTimeImmutable('17:00'));
+        $periodeMixte2->setSection($sectionAdmin);
+        $periodeMixte2->setAxe1($axe1Admin);
+        $periodeMixte2->setOrdre(2);
+        $jourTypeMixte->addPeriode($periodeMixte2);
+
+        $manager->persist($jourTypeMixte);
 
         $manager->flush();
     }

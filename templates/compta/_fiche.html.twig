@@ -67,6 +67,59 @@
                             Copier jour precedent
                         </button>
                     </form>
+                    {# Dropdown for loading day templates #}
+                    <div class="relative" x-data="{ open: false }">
+                        <button type="button"
+                                @click="open = !open"
+                                class="btn btn-secondary text-sm inline-flex items-center">
+                            Charger modele
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="open"
+                             @click.away="open = false"
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="transform opacity-100 scale-100"
+                             x-transition:leave-end="transform opacity-0 scale-95"
+                             class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg z-20 border border-gray-200 py-1">
+                            {% if jourTypes is defined and jourTypes|length > 0 %}
+                                {% for jourType in jourTypes %}
+                                    <form hx-post="{{ path('app_compta_apply_jour_type', {id: jourType.id, date: date|date('Y-m-d')}) }}"
+                                          hx-target="#fiche-container"
+                                          hx-swap="innerHTML"
+                                          class="block">
+                                        <button type="submit"
+                                                @click="open = false"
+                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-between">
+                                            <span>
+                                                {{ jourType.nom }}
+                                                {% if jourType.isGlobal %}
+                                                    <span class="text-xs text-gray-400">(partage)</span>
+                                                {% endif %}
+                                            </span>
+                                            <span class="text-xs text-gray-500 font-mono">{{ jourType.totalFormatted }}</span>
+                                        </button>
+                                    </form>
+                                {% endfor %}
+                                <div class="border-t border-gray-100 mt-1 pt-1">
+                                    <a href="{{ path('app_jour_type_index') }}"
+                                       class="block px-4 py-2 text-sm text-primary-600 hover:bg-gray-100">
+                                        Gerer mes modeles
+                                    </a>
+                                </div>
+                            {% else %}
+                                <span class="block px-4 py-2 text-sm text-gray-500">Aucun modele</span>
+                                <a href="{{ path('app_jour_type_new') }}"
+                                   class="block px-4 py-2 text-sm text-primary-600 hover:bg-gray-100">
+                                    Creer un modele
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
                     <button hx-get="{{ path('app_compta_periode_new', {date: date|date('Y-m-d')}) }}"
                             hx-target="#modal-container"
                             hx-swap="innerHTML"

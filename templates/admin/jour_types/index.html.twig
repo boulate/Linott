@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modeles de journee partages - Administration - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <a href="{{ path('app_admin') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Administration</a>
+            <h1 class="text-2xl font-bold text-gray-900">Modeles de journee partages</h1>
+            <p class="text-sm text-gray-600 mt-1">
+                Ces modeles sont disponibles pour tous les utilisateurs
+            </p>
+        </div>
+        <a href="{{ path('app_admin_jour_types_new') }}"
+           class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">
+            + Nouveau modele partage
+        </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Ordre</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Nom</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Description</th>
+                    <th class="px-4 py-3 text-center text-sm font-medium text-gray-500">Periodes</th>
+                    <th class="px-4 py-3 text-center text-sm font-medium text-gray-500">Total</th>
+                    <th class="px-4 py-3 text-center text-sm font-medium text-gray-500">Statut</th>
+                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-500">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for jourType in jourTypes %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-gray-500">{{ jourType.ordre }}</td>
+                        <td class="px-4 py-3">
+                            <span class="font-medium text-gray-900">{{ jourType.nom }}</span>
+                        </td>
+                        <td class="px-4 py-3 text-gray-600 max-w-xs truncate">
+                            {{ jourType.description|default('-') }}
+                        </td>
+                        <td class="px-4 py-3 text-center text-gray-600">
+                            {{ jourType.periodes|length }}
+                        </td>
+                        <td class="px-4 py-3 text-center font-mono text-gray-900">
+                            {{ jourType.totalFormatted }}
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            {% if jourType.actif %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Actif
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    Inactif
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3 text-right space-x-2">
+                            <form action="{{ path('app_admin_jour_types_duplicate', {id: jourType.id}) }}"
+                                  method="post"
+                                  class="inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('duplicate' ~ jourType.id) }}">
+                                <button type="submit"
+                                        class="text-gray-500 hover:text-gray-700 text-sm"
+                                        title="Dupliquer">
+                                    Dupliquer
+                                </button>
+                            </form>
+                            <a href="{{ path('app_admin_jour_types_edit', {id: jourType.id}) }}"
+                               class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                Modifier
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                            Aucun modele partage
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

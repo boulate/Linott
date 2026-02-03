@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes modeles de journee - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <a href="{{ path('app_compta') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Comptabilite</a>
+            <h1 class="text-2xl font-bold text-gray-900">Mes modeles de journee</h1>
+            <p class="text-sm text-gray-600 mt-1">
+                Creez des modeles de journees types pour pre-remplir rapidement vos fiches
+            </p>
+        </div>
+        <a href="{{ path('app_jour_type_new') }}"
+           class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">
+            + Nouveau modele
+        </a>
+    </div>
+
+    {% if jourTypes|length > 0 %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for jourType in jourTypes %}
+            <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow">
+                <div class="p-4">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-medium text-gray-900">
+                                {{ jourType.nom }}
+                            </h3>
+                            {% if jourType.description %}
+                                <p class="text-sm text-gray-500 mt-1">{{ jourType.description }}</p>
+                            {% endif %}
+                        </div>
+                        {% if not jourType.actif %}
+                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                Inactif
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-4 space-y-2">
+                        {% for periode in jourType.periodes %}
+                            <div class="flex items-center text-sm text-gray-600 bg-gray-50 rounded px-2 py-1">
+                                <span class="font-mono text-gray-900">
+                                    {{ periode.heureDebut|date('H:i') }} - {{ periode.heureFin|date('H:i') }}
+                                </span>
+                                <span class="mx-2 text-gray-400">|</span>
+                                <span class="truncate">{{ periode.section.libelle }}</span>
+                            </div>
+                        {% else %}
+                            <p class="text-sm text-gray-400 italic">Aucune periode</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between border-t pt-4">
+                        <div class="text-sm text-gray-500">
+                            Total: <span class="font-semibold text-gray-900">{{ jourType.totalFormatted }}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <form action="{{ path('app_jour_type_duplicate', {id: jourType.id}) }}" method="post" class="inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('duplicate' ~ jourType.id) }}">
+                                <button type="submit"
+                                        class="text-gray-500 hover:text-gray-700 text-sm"
+                                        title="Dupliquer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                            <a href="{{ path('app_jour_type_edit', {id: jourType.id}) }}"
+                               class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                Modifier
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-white rounded-lg shadow p-8 text-center">
+        <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <h3 class="mt-4 text-lg font-medium text-gray-900">Aucun modele</h3>
+        <p class="mt-2 text-sm text-gray-500">
+            Commencez par creer votre premier modele de journee type.
+        </p>
+        <a href="{{ path('app_jour_type_new') }}"
+           class="mt-4 inline-block bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">
+            Creer un modele
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

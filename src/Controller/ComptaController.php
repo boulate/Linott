@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\JourType;
 use App\Entity\Periode;
 use App\Entity\User;
 use App\Form\PeriodeType;
+use App\Repository\JourTypeRepository;
 use App\Repository\PeriodeRepository;
 use App\Service\ComptaService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +22,7 @@ class ComptaController extends AbstractController
     public function __construct(
         private ComptaService $comptaService,
         private PeriodeRepository $periodeRepository,
+        private JourTypeRepository $jourTypeRepository,
         private EntityManagerInterface $entityManager
     ) {
     }
@@ -33,6 +36,7 @@ class ComptaController extends AbstractController
 
         $periodes = $this->periodeRepository->findByUserAndDate($user, $currentDate);
         $weekData = $this->comptaService->getWeekData($user, $currentDate);
+        $jourTypes = $this->jourTypeRepository->findForUser($user);
 
         $params = [
             'date' => $currentDate,
@@ -41,6 +45,7 @@ class ComptaController extends AbstractController
             'periodes' => $periodes,
             'totalHeures' => $this->comptaService->getTotalForDate($user, $currentDate),
             'weekData' => $weekData,
+            'jourTypes' => $jourTypes,
         ];
 
         // Only return partial for targeted HTMX requests, not boosted navigation
@@ -246,6 +251,44 @@ class ComptaController extends AbstractController
         } else {
             $this->addFlash('info', 'Aucune periode a valider pour cette semaine.');
         }
+
+        if ($request->headers->has('HX-Request')) {
+            return $this->redirectToRoute('app_compta', ['date' => $date]);
+        }
+
+        return $this->redirectToRoute('app_compta', ['date' => $date]);
+    }
+
+    #[Route('/apply-jour-type/{id}/{date}', name: 'app_compta_apply_jour_type', requirements: ['date' => '\d{4}-\d{2}-\d{2}'], methods: ['POST'])]
+    public function applyJourType(JourType $jourType, string $date, Request $request, #[CurrentUser] User $user): Response
+    {
+        $currentDate = new \DateTimeImmutable($date);
+
+        // Check if day already has periods
+        $existingPeriodes = $this->periodeRepository->findByUserAndDate($user, $currentDate);
+        if (count($existingPeriodes) > 0) {
+            $this->addFlash('warning', 'Cette journee contient deja des periodes.');
+            return $this->redirectToRoute('app_compta', ['date' => $date]);
+        }
+
+        // Check access to the template (personal or shared)
+        if ($jourType->getUser() !== null && $jourType->getUser() !== $user && !$jourType->isPartage()) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas acces a ce modele.');
+        }
+
+        $newPeriodes = $this->comptaService->applyJourType($user, $jourType, $currentDate);
+
+        if (count($newPeriodes) === 0) {
+            $this->addFlash('info', 'Ce modele ne contient aucune periode.');
+            return $this->redirectToRoute('app_compta', ['date' => $date]);
+        }
+
+        foreach ($newPeriodes as $periode) {
+            $this->entityManager->persist($periode);
+        }
+        $this->entityManager->flush();
+
+        $this->addFlash('success', count($newPeriodes) . ' periode(s) creee(s) depuis le modele "' . $jourType->getNom() . '".');
 
         if ($request->headers->has('HX-Request')) {
             return $this->redirectToRoute('app_compta', ['date' => $date]);

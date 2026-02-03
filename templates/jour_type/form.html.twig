@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if isNew %}Nouveau modele{% else %}Modifier {{ jourType.nom }}{% endif %} - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="mb-6">
+        <a href="{{ path('app_jour_type_index') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Mes modeles</a>
+        <h1 class="text-2xl font-bold text-gray-900">
+            {% if isNew %}Nouveau modele de journee{% else %}Modifier "{{ jourType.nom }}"{% endif %}
+        </h1>
+    </div>
+
+    <div x-data="jourTypeForm()" class="space-y-6">
+        {{ form_start(form, {'attr': {'class': 'space-y-6', 'novalidate': 'novalidate'}}) }}
+
+        {# Basic information #}
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Informations generales</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    {{ form_label(form.nom, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                    {{ form_errors(form.nom) }}
+                </div>
+                <div>
+                    {{ form_label(form.ordre, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                    {{ form_widget(form.ordre, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                    {{ form_errors(form.ordre) }}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                {{ form_label(form.description, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="mt-4">
+                <label class="flex items-center gap-2">
+                    {{ form_widget(form.actif, {'attr': {'class': 'rounded border-gray-300 text-primary-600 focus:ring-primary-500'}}) }}
+                    <span class="text-sm font-medium text-gray-700">Modele actif</span>
+                </label>
+            </div>
+
+            {% if form.partage is defined %}
+            <div class="mt-4">
+                <label class="flex items-center gap-2">
+                    {{ form_widget(form.partage, {'attr': {'class': 'rounded border-gray-300 text-primary-600 focus:ring-primary-500'}}) }}
+                    <span class="text-sm font-medium text-gray-700">Partager avec tous les utilisateurs</span>
+                </label>
+            </div>
+            {% endif %}
+        </div>
+
+        {# Periods #}
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-medium text-gray-900">Periodes</h2>
+                <button type="button"
+                        @click="addPeriode"
+                        class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                    + Ajouter une periode
+                </button>
+            </div>
+
+            <div id="periodes-container" class="space-y-4" data-prototype="{{ form_widget(form.periodes.vars.prototype)|e('html_attr') }}" data-index="{{ form.periodes|length }}">
+                {% for periodeForm in form.periodes %}
+                    <div class="periode-item border border-gray-200 rounded-lg p-4 relative" data-index="{{ loop.index0 }}">
+                        <button type="button"
+                                @click="removePeriode($event)"
+                                class="absolute top-2 right-2 text-gray-400 hover:text-red-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div>
+                                {{ form_label(periodeForm.heureDebut, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                                {{ form_widget(periodeForm.heureDebut, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                                {{ form_errors(periodeForm.heureDebut) }}
+                            </div>
+                            <div>
+                                {{ form_label(periodeForm.heureFin, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                                {{ form_widget(periodeForm.heureFin, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                                {{ form_errors(periodeForm.heureFin) }}
+                            </div>
+                            <div class="col-span-2">
+                                {{ form_label(periodeForm.section, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                                {{ form_widget(periodeForm.section, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                                {{ form_errors(periodeForm.section) }}
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div>
+                                {{ form_label(periodeForm.axe1, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                                {{ form_widget(periodeForm.axe1, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                                {{ form_errors(periodeForm.axe1) }}
+                            </div>
+                            <div>
+                                {{ form_label(periodeForm.axe2, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                                {{ form_widget(periodeForm.axe2, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                                {{ form_errors(periodeForm.axe2) }}
+                            </div>
+                            <div>
+                                {{ form_label(periodeForm.axe3, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                                {{ form_widget(periodeForm.axe3, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                                {{ form_errors(periodeForm.axe3) }}
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            {{ form_label(periodeForm.commentaire, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                            {{ form_widget(periodeForm.commentaire, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                            {{ form_errors(periodeForm.commentaire) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div id="empty-periodes" class="{% if form.periodes|length > 0 %}hidden{% endif %} text-center py-8 text-gray-500">
+                <p>Aucune periode. Cliquez sur "Ajouter une periode" pour commencer.</p>
+            </div>
+        </div>
+
+        {# Actions #}
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                {% if not isNew %}
+                    <form action="{{ path('app_jour_type_delete', {id: jourType.id}) }}"
+                          method="post"
+                          onsubmit="return confirm('Etes-vous sur de vouloir supprimer ce modele ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jourType.id) }}">
+                        <button type="submit" class="text-red-600 hover:text-red-700 text-sm font-medium">
+                            Supprimer ce modele
+                        </button>
+                    </form>
+                {% else %}
+                    <div></div>
+                {% endif %}
+
+                <div class="flex gap-3">
+                    <a href="{{ path('app_jour_type_index') }}"
+                       class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700">
+                        {% if isNew %}Creer le modele{% else %}Enregistrer{% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<script>
+function jourTypeForm() {
+    return {
+        init() {
+            this.updateEmptyState();
+        },
+        addPeriode() {
+            const container = document.getElementById('periodes-container');
+            const prototype = container.dataset.prototype;
+            let index = parseInt(container.dataset.index);
+
+            const newForm = prototype.replace(/__name__/g, index);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = newForm;
+
+            const newElement = document.createElement('div');
+            newElement.className = 'periode-item border border-gray-200 rounded-lg p-4 relative';
+            newElement.dataset.index = index;
+            newElement.innerHTML = `
+                <button type="button"
+                        @click="removePeriode($event)"
+                        class="absolute top-2 right-2 text-gray-400 hover:text-red-500">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                ${tempDiv.innerHTML}
+            `;
+
+            // Style the inputs
+            newElement.querySelectorAll('input, select, textarea').forEach(el => {
+                el.classList.add('w-full', 'rounded-lg', 'border-gray-300', 'shadow-sm', 'focus:border-primary-500', 'focus:ring-primary-500');
+            });
+            newElement.querySelectorAll('label').forEach(el => {
+                el.classList.add('block', 'text-sm', 'font-medium', 'text-gray-700', 'mb-1');
+            });
+
+            container.appendChild(newElement);
+            container.dataset.index = index + 1;
+
+            this.updateEmptyState();
+        },
+        removePeriode(event) {
+            const item = event.target.closest('.periode-item');
+            if (item) {
+                item.remove();
+                this.updateEmptyState();
+            }
+        },
+        updateEmptyState() {
+            const container = document.getElementById('periodes-container');
+            const emptyState = document.getElementById('empty-periodes');
+            const hasItems = container.querySelectorAll('.periode-item').length > 0;
+
+            if (emptyState) {
+                emptyState.classList.toggle('hidden', hasItems);
+            }
+        }
+    };
+}
+</script>
+{% endblock %}
