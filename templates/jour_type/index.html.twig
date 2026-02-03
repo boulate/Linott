@@ -17,6 +17,7 @@
             </p>
         </div>
         <a href="{{ path('app_jour_type_new') }}"
+           hx-boost="false"
            class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">
             + Nouveau modele
         </a>
@@ -73,6 +74,7 @@
                                 </button>
                             </form>
                             <a href="{{ path('app_jour_type_edit', {id: jourType.id}) }}"
+                               hx-boost="false"
                                class="text-primary-600 hover:text-primary-700 text-sm font-medium">
                                 Modifier
                             </a>
@@ -92,6 +94,7 @@
             Commencez par creer votre premier modele de journee type.
         </p>
         <a href="{{ path('app_jour_type_new') }}"
+           hx-boost="false"
            class="mt-4 inline-block bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">
             Creer un modele
         </a>

@@ -7,13 +7,13 @@ use App\Entity\Axe2;
 use App\Entity\Axe3;
 use App\Entity\JourTypePeriode;
 use App\Entity\Section;
+use App\Form\Type\SplitTimeType;
 use App\Repository\Axe1Repository;
 use App\Repository\Axe2Repository;
 use App\Repository\Axe3Repository;
 use App\Repository\SectionRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use App\Form\Type\SplitTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class JourTypePeriodeType extends AbstractType
+class JourTypePeriodeSingleType extends AbstractType
 {
     public function __construct(
         private SectionRepository $sectionRepository,
@@ -36,6 +36,7 @@ class JourTypePeriodeType extends AbstractType
         $builder
             ->add('heureDebut', SplitTimeType::class, [
                 'label' => 'Debut',
+                'autofocus' => true,
             ])
             ->add('heureFin', SplitTimeType::class, [
                 'label' => 'Fin',
@@ -53,15 +54,14 @@ class JourTypePeriodeType extends AbstractType
                 'placeholder' => '-- Choisir une section --',
                 'label' => 'Section',
                 'attr' => [
-                    'class' => 'form-select',
-                    'data-cascade' => 'section',
+                    'class' => 'form-select w-full',
                 ],
             ])
             ->add('commentaire', TextType::class, [
                 'label' => 'Commentaire',
                 'required' => false,
                 'attr' => [
-                    'class' => 'form-input',
+                    'class' => 'form-input w-full',
                 ],
             ]);
 
@@ -77,8 +77,7 @@ class JourTypePeriodeType extends AbstractType
                 'required' => false,
                 'label' => 'Axe 1',
                 'attr' => [
-                    'class' => 'form-select',
-                    'data-cascade' => 'axe1',
+                    'class' => 'form-select w-full',
                 ],
             ]);
 
@@ -93,8 +92,7 @@ class JourTypePeriodeType extends AbstractType
                 'required' => false,
                 'label' => 'Axe 2',
                 'attr' => [
-                    'class' => 'form-select',
-                    'data-cascade' => 'axe2',
+                    'class' => 'form-select w-full',
                 ],
             ]);
 
@@ -109,8 +107,7 @@ class JourTypePeriodeType extends AbstractType
                 'required' => false,
                 'label' => 'Axe 3',
                 'attr' => [
-                    'class' => 'form-select',
-                    'data-cascade' => 'axe3',
+                    'class' => 'form-select w-full',
                 ],
             ]);
         };
@@ -146,5 +143,11 @@ class JourTypePeriodeType extends AbstractType
         $resolver->setDefaults([
             'data_class' => JourTypePeriode::class,
         ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        // Use same prefix as PeriodeType so the API cascade selects work
+        return 'periode';
     }
 }

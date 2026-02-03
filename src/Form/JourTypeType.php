@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\JourType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,15 +45,9 @@ class JourTypeType extends AbstractType
                 'label' => 'Actif',
                 'required' => false,
                 'attr' => ['class' => 'form-checkbox'],
-            ])
-            ->add('periodes', CollectionType::class, [
-                'entry_type' => JourTypePeriodeType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'label' => false,
             ]);
+
+        // Note: periodes are managed via HTMX, not embedded in this form
 
         if ($options['is_admin']) {
             $builder->add('partage', CheckboxType::class, [

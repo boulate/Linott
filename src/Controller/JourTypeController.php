@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\JourType;
+use App\Entity\JourTypePeriode;
 use App\Entity\User;
+use App\Form\JourTypePeriodeSingleType;
 use App\Form\JourTypeType;
 use App\Repository\JourTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -134,5 +136,114 @@ class JourTypeController extends AbstractController
         }
 
         return $this->redirectToRoute('app_jour_type_index');
+    }
+
+    #[Route('/{id}/periode/new', name: 'app_jour_type_periode_new')]
+    public function newPeriode(JourType $jourType, Request $request, #[CurrentUser] User $user): Response
+    {
+        // Security check
+        if ($jourType->getUser() !== $user) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier ce modele.');
+        }
+
+        // Get last period BEFORE creating new one (for default times)
+        $lastPeriode = $jourType->getPeriodes()->last();
+
+        $periode = new JourTypePeriode();
+        $jourType->addPeriode($periode);
+
+        // Default times based on last period
+        if ($lastPeriode) {
+            $periode->setHeureDebut($lastPeriode->getHeureFin());
+            $periode->setHeureFin($lastPeriode->getHeureFin()->modify('+1 hour'));
+        } else {
+            $periode->setHeureDebut(new \DateTimeImmutable('09:00'));
+            $periode->setHeureFin(new \DateTimeImmutable('12:00'));
+        }
+
+        $form = $this->createForm(JourTypePeriodeSingleType::class, $periode, [
+            'action' => $this->generateUrl('app_jour_type_periode_new', ['id' => $jourType->getId()]),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $periode->setOrdre($jourType->getPeriodes()->count());
+            $this->entityManager->persist($periode);
+            $this->entityManager->flush();
+
+            return $this->render('jour_type/_periodes_list.html.twig', [
+                'jourType' => $jourType,
+                'periodes' => $jourType->getPeriodes(),
+                'totalFormatted' => $jourType->getTotalFormatted(),
+                'editRoute' => 'app_jour_type_periode_edit',
+                'deleteRoute' => 'app_jour_type_periode_delete',
+            ]);
+        }
+
+        return $this->render('compta/_periode_form.html.twig', [
+            'form' => $form,
+            'isEdit' => false,
+            'hxTarget' => '#periodes-list',
+        ]);
+    }
+
+    #[Route('/{id}/periode/{periodeId}/edit', name: 'app_jour_type_periode_edit')]
+    public function editPeriode(JourType $jourType, int $periodeId, Request $request, #[CurrentUser] User $user): Response
+    {
+        // Security check
+        if ($jourType->getUser() !== $user) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier ce modele.');
+        }
+
+        $periode = $this->entityManager->getRepository(JourTypePeriode::class)->find($periodeId);
+        if (!$periode || $periode->getJourType() !== $jourType) {
+            throw $this->createNotFoundException('Periode non trouvee.');
+        }
+
+        $form = $this->createForm(JourTypePeriodeSingleType::class, $periode, [
+            'action' => $this->generateUrl('app_jour_type_periode_edit', ['id' => $jourType->getId(), 'periodeId' => $periodeId]),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+
+            return $this->render('jour_type/_periodes_list.html.twig', [
+                'jourType' => $jourType,
+                'periodes' => $jourType->getPeriodes(),
+                'totalFormatted' => $jourType->getTotalFormatted(),
+                'editRoute' => 'app_jour_type_periode_edit',
+                'deleteRoute' => 'app_jour_type_periode_delete',
+            ]);
+        }
+
+        return $this->render('compta/_periode_form.html.twig', [
+            'form' => $form,
+            'isEdit' => true,
+            'hxTarget' => '#periodes-list',
+        ]);
+    }
+
+    #[Route('/{id}/periode/{periodeId}/delete', name: 'app_jour_type_periode_delete', methods: ['DELETE'])]
+    public function deletePeriode(JourType $jourType, int $periodeId, #[CurrentUser] User $user): Response
+    {
+        // Security check
+        if ($jourType->getUser() !== $user) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier ce modele.');
+        }
+
+        $periode = $this->entityManager->getRepository(JourTypePeriode::class)->find($periodeId);
+        if ($periode && $periode->getJourType() === $jourType) {
+            $this->entityManager->remove($periode);
+            $this->entityManager->flush();
+        }
+
+        return $this->render('jour_type/_periodes_list.html.twig', [
+            'jourType' => $jourType,
+            'periodes' => $jourType->getPeriodes(),
+            'totalFormatted' => $jourType->getTotalFormatted(),
+            'editRoute' => 'app_jour_type_periode_edit',
+            'deleteRoute' => 'app_jour_type_periode_delete',
+        ]);
     }
 }

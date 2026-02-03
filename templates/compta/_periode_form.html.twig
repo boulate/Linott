@@ -25,7 +25,7 @@
             {{ form_start(form, {attr: {
                 class: 'space-y-4',
                 'hx-post': form.vars.action,
-                'hx-target': '#fiche-container',
+                'hx-target': hxTarget|default('#fiche-container'),
                 'hx-swap': 'innerHTML',
                 'hx-on::after-request': "if(event.detail.successful && event.detail.requestConfig.verb === 'post') document.getElementById('modal-container').innerHTML = ''",
                 'onkeydown': "if(event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') { event.preventDefault(); this.requestSubmit(); }"

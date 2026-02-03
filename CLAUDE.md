@@ -824,6 +824,13 @@ vendor/bin/phpstan analyse                     # Analyse statique
 - Fragments Twig réutilisables
 - Commits atomiques
 
+### Réutilisation du code (IMPORTANT)
+
+- **Avant de créer un nouveau composant/template/service**, toujours vérifier s'il en existe déjà un similaire dans le projet
+- Privilégier la paramétrisation d'un composant existant (avec des variables Twig, des options de formulaire, etc.) plutôt que la duplication
+- Les templates partiels réutilisables doivent être dans `templates/components/` ou rendus paramétrables
+- Quand l'utilisateur dit "comme dans [autre partie]", chercher immédiatement le code existant pour le réutiliser
+
 ---
 
 *Dernière mise à jour : 2026-02-03*
