@@ -2,9 +2,10 @@
  * Alpine.js component for cascading axes selector with bidirectional selection
  *
  * Features:
- * - Descendant filtering: selecting a parent filters all descendant levels
+ * - Descendant filtering: selecting a parent filters all descendant levels (configurable)
  * - Ancestor auto-fill: selecting a child automatically fills all ancestors
  * - Deselection: clears children but keeps parents
+ * - Configurable inheritance: each level can be independent or filtered by parent
  */
 function periodeAxesSelector(config) {
     return {
@@ -13,6 +14,11 @@ function periodeAxesSelector(config) {
         allAxes1: config.axes1 || [],
         allAxes2: config.axes2 || [],
         allAxes3: config.axes3 || [],
+
+        // Inheritance configuration
+        axe1InheritsSection: config.inheritance?.axe1InheritsSection ?? true,
+        axe2InheritsAxe1: config.inheritance?.axe2InheritsAxe1 ?? true,
+        axe3InheritsAxe2: config.inheritance?.axe3InheritsAxe2 ?? true,
 
         // Current selections (as strings for select compatibility)
         selectedSection: String(config.initialSection || ''),
@@ -44,6 +50,7 @@ function periodeAxesSelector(config) {
 
         // Get Axe1 IDs that belong to selected section
         getAxe1IdsForSection(sectionId) {
+            if (!this.axe1InheritsSection) return null; // Independent - no filter
             if (!sectionId) return null; // null means no filter
             return this.allAxes1
                 .filter(a => a.sectionId == sectionId)
@@ -52,13 +59,17 @@ function periodeAxesSelector(config) {
 
         // Get Axe2 IDs that belong to selected axe1 or section
         getAxe2IdsForFilters() {
+            if (!this.axe2InheritsAxe1) return null; // Independent - no filter
+
             if (this.selectedAxe1) {
                 return this.allAxes2
                     .filter(a => a.axe1Id == this.selectedAxe1)
                     .map(a => a.id);
             }
-            if (this.selectedSection) {
-                const axe1Ids = this.getAxe1IdsForSection(this.selectedSection);
+            if (this.selectedSection && this.axe1InheritsSection) {
+                const axe1Ids = this.allAxes1
+                    .filter(a => a.sectionId == this.selectedSection)
+                    .map(a => a.id);
                 return this.allAxes2
                     .filter(a => axe1Ids.includes(a.axe1Id))
                     .map(a => a.id);
@@ -68,12 +79,14 @@ function periodeAxesSelector(config) {
 
         // Get Axe3 IDs based on current filters
         getAxe3IdsForFilters() {
+            if (!this.axe3InheritsAxe2) return null; // Independent - no filter
+
             if (this.selectedAxe2) {
                 return this.allAxes3
                     .filter(a => a.axe2Id == this.selectedAxe2)
                     .map(a => a.id);
             }
-            if (this.selectedAxe1) {
+            if (this.selectedAxe1 && this.axe2InheritsAxe1) {
                 const axe2Ids = this.allAxes2
                     .filter(a => a.axe1Id == this.selectedAxe1)
                     .map(a => a.id);
@@ -81,8 +94,10 @@ function periodeAxesSelector(config) {
                     .filter(a => axe2Ids.includes(a.axe2Id))
                     .map(a => a.id);
             }
-            if (this.selectedSection) {
-                const axe1Ids = this.getAxe1IdsForSection(this.selectedSection);
+            if (this.selectedSection && this.axe1InheritsSection && this.axe2InheritsAxe1) {
+                const axe1Ids = this.allAxes1
+                    .filter(a => a.sectionId == this.selectedSection)
+                    .map(a => a.id);
                 const axe2Ids = this.allAxes2
                     .filter(a => axe1Ids.includes(a.axe1Id))
                     .map(a => a.id);
@@ -133,8 +148,8 @@ function periodeAxesSelector(config) {
         onSelectSection(value) {
             this.selectedSection = value;
 
-            // Check if current axe1 is still valid
-            if (this.selectedAxe1) {
+            // Check if current axe1 is still valid (only if inheritance is active)
+            if (this.axe1InheritsSection && this.selectedAxe1) {
                 const axe1 = this.getAxe1ById(this.selectedAxe1);
                 if (axe1 && value && axe1.sectionId != value) {
                     this.selectedAxe1 = '';
@@ -159,8 +174,8 @@ function periodeAxesSelector(config) {
                 }
             }
 
-            // Check if current axe2 is still valid
-            if (this.selectedAxe2) {
+            // Check if current axe2 is still valid (only if inheritance is active)
+            if (this.axe2InheritsAxe1 && this.selectedAxe2) {
                 const axe2 = this.getAxe2ById(this.selectedAxe2);
                 if (axe2 && value && axe2.axe1Id != value) {
                     this.selectedAxe2 = '';
@@ -188,8 +203,8 @@ function periodeAxesSelector(config) {
                 }
             }
 
-            // Check if current axe3 is still valid
-            if (this.selectedAxe3) {
+            // Check if current axe3 is still valid (only if inheritance is active)
+            if (this.axe3InheritsAxe2 && this.selectedAxe3) {
                 const axe3 = this.getAxe3ById(this.selectedAxe3);
                 if (axe3 && value && axe3.axe2Id != value) {
                     this.selectedAxe3 = '';

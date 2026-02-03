@@ -68,4 +68,12 @@ class Axe1Repository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Find the default "_IND_" axe1 for orphan axes
+     */
+    public function findIndependentDefault(): ?Axe1
+    {
+        return $this->findOneBy(['code' => '_IND_']);
+    }
 }

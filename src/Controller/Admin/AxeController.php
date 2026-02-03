@@ -11,6 +11,7 @@ use App\Form\Admin\Axe3Type;
 use App\Repository\Axe1Repository;
 use App\Repository\Axe2Repository;
 use App\Repository\Axe3Repository;
+use App\Repository\ConfigurationRepository;
 use App\Repository\SectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +27,8 @@ class AxeController extends AbstractController
         private SectionRepository $sectionRepository,
         private Axe1Repository $axe1Repository,
         private Axe2Repository $axe2Repository,
-        private Axe3Repository $axe3Repository
+        private Axe3Repository $axe3Repository,
+        private ConfigurationRepository $configurationRepository
     ) {
     }
 
@@ -37,22 +39,42 @@ class AxeController extends AbstractController
         $axe1Id = $request->query->get('axe1');
         $axe2Id = $request->query->get('axe2');
 
+        // Get inheritance configuration
+        $axe1InheritsSection = $this->configurationRepository->getValue('axe1_inherits_section', '1') === '1';
+        $axe2InheritsAxe1 = $this->configurationRepository->getValue('axe2_inherits_axe1', '1') === '1';
+        $axe3InheritsAxe2 = $this->configurationRepository->getValue('axe3_inherits_axe2', '1') === '1';
+
         $sections = $this->sectionRepository->findBy(['actif' => true], ['ordre' => 'ASC']);
         $selectedSection = $sectionId ? $this->sectionRepository->find($sectionId) : ($sections[0] ?? null);
 
-        $axes1 = $selectedSection
-            ? $this->axe1Repository->findBy(['section' => $selectedSection], ['ordre' => 'ASC'])
-            : [];
+        // Axe1: show all if independent, otherwise filter by section
+        if ($axe1InheritsSection) {
+            $axes1 = $selectedSection
+                ? $this->axe1Repository->findBy(['section' => $selectedSection], ['ordre' => 'ASC'])
+                : [];
+        } else {
+            $axes1 = $this->axe1Repository->findBy([], ['ordre' => 'ASC']);
+        }
         $selectedAxe1 = $axe1Id ? $this->axe1Repository->find($axe1Id) : null;
 
-        $axes2 = $selectedAxe1
-            ? $this->axe2Repository->findBy(['axe1' => $selectedAxe1], ['ordre' => 'ASC'])
-            : [];
+        // Axe2: show all if independent, otherwise filter by axe1
+        if ($axe2InheritsAxe1) {
+            $axes2 = $selectedAxe1
+                ? $this->axe2Repository->findBy(['axe1' => $selectedAxe1], ['ordre' => 'ASC'])
+                : [];
+        } else {
+            $axes2 = $this->axe2Repository->findBy([], ['ordre' => 'ASC']);
+        }
         $selectedAxe2 = $axe2Id ? $this->axe2Repository->find($axe2Id) : null;
 
-        $axes3 = $selectedAxe2
-            ? $this->axe3Repository->findBy(['axe2' => $selectedAxe2], ['ordre' => 'ASC'])
-            : [];
+        // Axe3: show all if independent, otherwise filter by axe2
+        if ($axe3InheritsAxe2) {
+            $axes3 = $selectedAxe2
+                ? $this->axe3Repository->findBy(['axe2' => $selectedAxe2], ['ordre' => 'ASC'])
+                : [];
+        } else {
+            $axes3 = $this->axe3Repository->findBy([], ['ordre' => 'ASC']);
+        }
 
         return $this->render('admin/axes/index.html.twig', [
             'sections' => $sections,
@@ -62,7 +84,50 @@ class AxeController extends AbstractController
             'axes2' => $axes2,
             'selectedAxe2' => $selectedAxe2,
             'axes3' => $axes3,
+            'axe1InheritsSection' => $axe1InheritsSection,
+            'axe2InheritsAxe1' => $axe2InheritsAxe1,
+            'axe3InheritsAxe2' => $axe3InheritsAxe2,
         ]);
+    }
+
+    #[Route('/toggle-inheritance/{level}', name: 'app_admin_axes_toggle_inheritance', methods: ['POST'])]
+    public function toggleInheritance(string $level, Request $request): Response
+    {
+        $configKeys = [
+            'axe1' => 'axe1_inherits_section',
+            'axe2' => 'axe2_inherits_axe1',
+            'axe3' => 'axe3_inherits_axe2',
+        ];
+
+        if (!isset($configKeys[$level])) {
+            throw $this->createNotFoundException('Niveau invalide.');
+        }
+
+        $key = $configKeys[$level];
+        $currentValue = $this->configurationRepository->getValue($key, '1') === '1';
+        $newValue = $currentValue ? '0' : '1';
+
+        $descriptions = [
+            'axe1_inherits_section' => 'Axe 1 hérite de Section dans les filtres',
+            'axe2_inherits_axe1' => 'Axe 2 hérite de Axe 1 dans les filtres',
+            'axe3_inherits_axe2' => 'Axe 3 hérite de Axe 2 dans les filtres',
+        ];
+
+        $this->configurationRepository->setValue($key, $newValue, $descriptions[$key]);
+
+        $labels = [
+            'axe1' => 'Axe 1',
+            'axe2' => 'Axe 2',
+            'axe3' => 'Axe 3',
+        ];
+
+        if ($newValue === '1') {
+            $this->addFlash('success', $labels[$level] . ' hérite maintenant de son parent.');
+        } else {
+            $this->addFlash('success', $labels[$level] . ' est maintenant indépendant.');
+        }
+
+        return $this->redirectToRoute('app_admin_axes');
     }
 
     // Axe1 CRUD
@@ -70,19 +135,30 @@ class AxeController extends AbstractController
     public function newAxe1(Request $request): Response
     {
         $axe1 = new Axe1();
-        if ($sectionId = $request->query->get('section')) {
+        $isIndependent = $this->configurationRepository->getValue('axe1_inherits_section', '1') !== '1';
+
+        // Only pre-fill parent if NOT independent
+        if (!$isIndependent && $sectionId = $request->query->get('section')) {
             $axe1->setSection($this->sectionRepository->find($sectionId));
         }
 
-        $form = $this->createForm(Axe1Type::class, $axe1);
+        $form = $this->createForm(Axe1Type::class, $axe1, ['is_independent' => $isIndependent]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // In independent mode, ALWAYS use _IND_ parent
+            if ($isIndependent) {
+                $defaultSection = $this->sectionRepository->findIndependentDefault();
+                if ($defaultSection) {
+                    $axe1->setSection($defaultSection);
+                }
+            }
+
             $this->entityManager->persist($axe1);
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Axe 1 créé.');
-            return $this->redirectToRoute('app_admin_axes', ['section' => $axe1->getSection()->getId()]);
+            return $this->redirectToRoute('app_admin_axes');
         }
 
         return $this->render('admin/axes/form_axe1.html.twig', [
@@ -95,14 +171,15 @@ class AxeController extends AbstractController
     #[Route('/axe1/{id}/edit', name: 'app_admin_axe1_edit')]
     public function editAxe1(Axe1 $axe1, Request $request): Response
     {
-        $form = $this->createForm(Axe1Type::class, $axe1);
+        $isIndependent = $this->configurationRepository->getValue('axe1_inherits_section', '1') !== '1';
+        $form = $this->createForm(Axe1Type::class, $axe1, ['is_independent' => $isIndependent]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Axe 1 modifié.');
-            return $this->redirectToRoute('app_admin_axes', ['section' => $axe1->getSection()->getId()]);
+            return $this->redirectToRoute('app_admin_axes');
         }
 
         return $this->render('admin/axes/form_axe1.html.twig', [
@@ -130,22 +207,30 @@ class AxeController extends AbstractController
     public function newAxe2(Request $request): Response
     {
         $axe2 = new Axe2();
-        if ($axe1Id = $request->query->get('axe1')) {
+        $isIndependent = $this->configurationRepository->getValue('axe2_inherits_axe1', '1') !== '1';
+
+        // Only pre-fill parent if NOT independent
+        if (!$isIndependent && $axe1Id = $request->query->get('axe1')) {
             $axe2->setAxe1($this->axe1Repository->find($axe1Id));
         }
 
-        $form = $this->createForm(Axe2Type::class, $axe2);
+        $form = $this->createForm(Axe2Type::class, $axe2, ['is_independent' => $isIndependent]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // In independent mode, ALWAYS use _IND_ parent
+            if ($isIndependent) {
+                $defaultAxe1 = $this->axe1Repository->findIndependentDefault();
+                if ($defaultAxe1) {
+                    $axe2->setAxe1($defaultAxe1);
+                }
+            }
+
             $this->entityManager->persist($axe2);
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Axe 2 créé.');
-            return $this->redirectToRoute('app_admin_axes', [
-                'section' => $axe2->getAxe1()->getSection()->getId(),
-                'axe1' => $axe2->getAxe1()->getId(),
-            ]);
+            return $this->redirectToRoute('app_admin_axes');
         }
 
         return $this->render('admin/axes/form_axe2.html.twig', [
@@ -158,17 +243,15 @@ class AxeController extends AbstractController
     #[Route('/axe2/{id}/edit', name: 'app_admin_axe2_edit')]
     public function editAxe2(Axe2 $axe2, Request $request): Response
     {
-        $form = $this->createForm(Axe2Type::class, $axe2);
+        $isIndependent = $this->configurationRepository->getValue('axe2_inherits_axe1', '1') !== '1';
+        $form = $this->createForm(Axe2Type::class, $axe2, ['is_independent' => $isIndependent]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Axe 2 modifié.');
-            return $this->redirectToRoute('app_admin_axes', [
-                'section' => $axe2->getAxe1()->getSection()->getId(),
-                'axe1' => $axe2->getAxe1()->getId(),
-            ]);
+            return $this->redirectToRoute('app_admin_axes');
         }
 
         return $this->render('admin/axes/form_axe2.html.twig', [
@@ -197,24 +280,30 @@ class AxeController extends AbstractController
     public function newAxe3(Request $request): Response
     {
         $axe3 = new Axe3();
-        if ($axe2Id = $request->query->get('axe2')) {
+        $isIndependent = $this->configurationRepository->getValue('axe3_inherits_axe2', '1') !== '1';
+
+        // Only pre-fill parent if NOT independent
+        if (!$isIndependent && $axe2Id = $request->query->get('axe2')) {
             $axe3->setAxe2($this->axe2Repository->find($axe2Id));
         }
 
-        $form = $this->createForm(Axe3Type::class, $axe3);
+        $form = $this->createForm(Axe3Type::class, $axe3, ['is_independent' => $isIndependent]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // In independent mode, ALWAYS use _IND_ parent
+            if ($isIndependent) {
+                $defaultAxe2 = $this->axe2Repository->findIndependentDefault();
+                if ($defaultAxe2) {
+                    $axe3->setAxe2($defaultAxe2);
+                }
+            }
+
             $this->entityManager->persist($axe3);
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Axe 3 créé.');
-            $axe2 = $axe3->getAxe2();
-            return $this->redirectToRoute('app_admin_axes', [
-                'section' => $axe2->getAxe1()->getSection()->getId(),
-                'axe1' => $axe2->getAxe1()->getId(),
-                'axe2' => $axe2->getId(),
-            ]);
+            return $this->redirectToRoute('app_admin_axes');
         }
 
         return $this->render('admin/axes/form_axe3.html.twig', [
@@ -227,19 +316,15 @@ class AxeController extends AbstractController
     #[Route('/axe3/{id}/edit', name: 'app_admin_axe3_edit')]
     public function editAxe3(Axe3 $axe3, Request $request): Response
     {
-        $form = $this->createForm(Axe3Type::class, $axe3);
+        $isIndependent = $this->configurationRepository->getValue('axe3_inherits_axe2', '1') !== '1';
+        $form = $this->createForm(Axe3Type::class, $axe3, ['is_independent' => $isIndependent]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Axe 3 modifié.');
-            $axe2 = $axe3->getAxe2();
-            return $this->redirectToRoute('app_admin_axes', [
-                'section' => $axe2->getAxe1()->getSection()->getId(),
-                'axe1' => $axe2->getAxe1()->getId(),
-                'axe2' => $axe2->getId(),
-            ]);
+            return $this->redirectToRoute('app_admin_axes');
         }
 
         return $this->render('admin/axes/form_axe3.html.twig', [

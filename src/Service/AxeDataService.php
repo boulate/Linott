@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Repository\Axe1Repository;
 use App\Repository\Axe2Repository;
 use App\Repository\Axe3Repository;
+use App\Repository\ConfigurationRepository;
 use App\Repository\SectionRepository;
 
 class AxeDataService
@@ -13,14 +14,15 @@ class AxeDataService
         private SectionRepository $sectionRepository,
         private Axe1Repository $axe1Repository,
         private Axe2Repository $axe2Repository,
-        private Axe3Repository $axe3Repository
+        private Axe3Repository $axe3Repository,
+        private ConfigurationRepository $configurationRepository
     ) {
     }
 
     /**
      * Récupère toutes les données des axes pour le sélecteur Alpine.js
      *
-     * @return array{sections: array, axes1: array, axes2: array, axes3: array}
+     * @return array{sections: array, axes1: array, axes2: array, axes3: array, inheritance: array}
      */
     public function getAllAxesData(): array
     {
@@ -53,6 +55,11 @@ class AxeDataService
                 'libelle' => $a->getLibelle(),
                 'axe2Id' => $a->getAxe2()->getId(),
             ], $axes3),
+            'inheritance' => [
+                'axe1InheritsSection' => $this->configurationRepository->getValue('axe1_inherits_section', '1') === '1',
+                'axe2InheritsAxe1' => $this->configurationRepository->getValue('axe2_inherits_axe1', '1') === '1',
+                'axe3InheritsAxe2' => $this->configurationRepository->getValue('axe3_inherits_axe2', '1') === '1',
+            ],
         ];
     }
 }

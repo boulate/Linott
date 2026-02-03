@@ -41,4 +41,12 @@ class SectionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Find the default "_IND_" section for orphan axes
+     */
+    public function findIndependentDefault(): ?Section
+    {
+        return $this->findOneBy(['code' => '_IND_']);
+    }
 }

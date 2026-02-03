@@ -17,8 +17,11 @@ class Axe1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('section', EntityType::class, [
+        $isIndependent = $options['is_independent'];
+
+        // Only show parent field if NOT independent
+        if (!$isIndependent) {
+            $builder->add('section', EntityType::class, [
                 'class' => Section::class,
                 'choice_label' => fn(Section $s) => $s->getCode() . ' - ' . $s->getLibelle(),
                 'query_builder' => fn(SectionRepository $repo) => $repo->createQueryBuilder('s')
@@ -27,8 +30,10 @@ class Axe1Type extends AbstractType
                     ->orderBy('s.ordre', 'ASC'),
                 'label' => 'Section',
                 'attr' => ['class' => 'form-select'],
-            ])
-            ->add('code', TextType::class, [
+            ]);
+        }
+
+        $builder->add('code', TextType::class, [
                 'label' => 'Code',
                 'attr' => ['class' => 'form-input', 'maxlength' => 10],
             ])
@@ -50,6 +55,7 @@ class Axe1Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Axe1::class,
+            'is_independent' => false,
         ]);
     }
 }
