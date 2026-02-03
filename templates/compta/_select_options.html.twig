@@ -1,0 +1,14 @@
+<select name="{{ name }}"
+        class="form-select"
+        data-cascade="{{ dataAttribute|default('') }}"
+        {% if htmxTarget is defined %}
+            hx-get="{{ htmxUrl }}"
+            hx-target="{{ htmxTarget }}"
+            hx-include="{{ htmxInclude|default('this') }}"
+            hx-trigger="change"
+        {% endif %}>
+    <option value="">{{ placeholder }}</option>
+    {% for option in options %}
+        <option value="{{ option.id }}">{{ option.code }} - {{ option.libelle }}</option>
+    {% endfor %}
+</select>

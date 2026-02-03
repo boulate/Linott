@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Saisie des heures - Linott{% endblock %}
+
+{% block body %}
+<div class="min-h-full">
+    {% include 'components/_navbar.html.twig' with {current: 'compta'} %}
+
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <h1 class="text-3xl font-bold text-gray-900">
+                    Saisie des heures
+                </h1>
+
+                <div id="nav-buttons" class="flex items-center">
+                    <button id="btn-today"
+                            hx-get="{{ path('app_compta') }}"
+                            hx-target="#fiche-container"
+                            hx-push-url="true"
+                            class="mr-2 p-2 text-gray-400 hover:text-primary-600 hover:bg-gray-100 rounded"
+                            title="Aujourd'hui">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+
+                    <button id="btn-precedent"
+                            hx-get="{{ path('app_compta', {date: previousDate}) }}"
+                            hx-target="#fiche-container"
+                            hx-push-url="true"
+                            class="btn btn-secondary">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        Precedent
+                    </button>
+
+                    <div id="date-picker" class="w-72 text-center" x-data="{ showPicker: false }">
+                        <h2 id="current-date" class="text-xl font-semibold text-gray-700 cursor-pointer hover:text-primary-600"
+                            @click="showPicker = !showPicker">
+                            {{ date|format_datetime('full', 'none', locale='fr')|capitalize }}
+                        </h2>
+                        <div x-show="showPicker" @click.away="showPicker = false" class="relative">
+                            <input type="date"
+                                   value="{{ date|date('Y-m-d') }}"
+                                   class="absolute top-0 left-1/2 transform -translate-x-1/2 mt-2 form-input"
+                                   @change="window.location.href = '/compta/' + $event.target.value">
+                        </div>
+                    </div>
+
+                    <button id="btn-suivant"
+                            hx-get="{{ path('app_compta', {date: nextDate}) }}"
+                            hx-target="#fiche-container"
+                            hx-push-url="true"
+                            class="btn btn-secondary">
+                        Suivant
+                        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            {% include 'components/_flash_messages.html.twig' %}
+
+            <div id="fiche-container">
+                {% include 'compta/_fiche.html.twig' %}
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="modal-container"></div>
+{% endblock %}

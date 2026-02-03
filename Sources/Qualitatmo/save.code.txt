@@ -1,0 +1,26 @@
+ 
+							<!--Rédacteur:
+							<input type="text" name="redacteur"/>-->
+						<!-- Gestion des Rédacteurs -->
+						<?php>			
+							$reponse_utilisateurs = $bdd->query('SELECT * FROM utilisateurs ORDER BY username');
+
+						?>
+							<label for="redacteur">Rédacteur: </label>
+							<select name="redacteur" id="ID_user">			
+						<?php			
+							while ($donnees = $reponse_utilisateurs->fetch())
+							{
+							$nom_utilisateur=$donnees['username'];
+							$id_utilisateur=$donnees['ID_users'];
+						?>
+							<option value="<?php echo $nom_utilisateur ?>"><?php echo $nom_utilisateur ?></option>	
+						<?php
+							}
+							$reponse_utilisateurs->closeCursor(); // Termine le traitement de la requête
+						?>
+							</select>
+							
+							
+							
+							

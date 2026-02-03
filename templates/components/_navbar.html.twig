@@ -1,0 +1,83 @@
+<nav class="bg-primary-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <a href="{{ path('app_dashboard') }}" class="text-2xl">⏱️</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="{{ path('app_dashboard') }}"
+                           class="{% if current|default('') == 'dashboard' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
+                            Tableau de bord
+                        </a>
+                        <a href="{{ path('app_compta') }}"
+                           class="{% if current|default('') == 'compta' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
+                            Compta
+                        </a>
+                        <a href="{{ path('app_calendrier') }}"
+                           class="{% if current|default('') == 'calendrier' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
+                            Calendrier
+                        </a>
+                        <a href="{{ path('app_stats') }}"
+                           class="{% if current|default('') == 'stats' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
+                            Stats
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_admin') }}"
+                           class="{% if current|default('') == 'admin' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
+                            Admin
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="hidden md:block">
+                <div class="ml-4 flex items-center md:ml-6">
+                    <div class="ml-3 relative" x-data="{ open: false }">
+                        <div>
+                            <button @click="open = !open" type="button"
+                                    class="max-w-xs bg-primary-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary-800 focus:ring-white">
+                                <span class="sr-only">Menu utilisateur</span>
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary-600">
+                                    <span class="text-sm font-medium leading-none text-white">
+                                        {{ app.user.prenom|slice(0, 1)|upper }}{{ app.user.nom|slice(0, 1)|upper }}
+                                    </span>
+                                </span>
+                                <span class="ml-2 text-white text-sm">{{ app.user.fullName }}</span>
+                                <svg class="ml-1 h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div x-show="open"
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="transform opacity-100 scale-100"
+                             x-transition:leave-end="transform opacity-0 scale-95"
+                             @click.away="open = false"
+                             class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                            <div class="px-4 py-2 text-xs text-gray-500 border-b">
+                                {{ app.user.email }}
+                            </div>
+                            <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" hx-boost="false">
+                                Se deconnecter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="-mr-2 flex md:hidden" x-data="{ mobileOpen: false }">
+                <button @click="mobileOpen = !mobileOpen" type="button"
+                        class="bg-primary-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary-800 focus:ring-white">
+                    <span class="sr-only">Menu principal</span>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>

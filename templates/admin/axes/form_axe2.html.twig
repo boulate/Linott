@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if isNew %}Nouvel Axe 2{% else %}Modifier {{ axe2.code }}{% endif %} - Administration - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="mb-6">
+        <a href="{{ path('app_admin_axes') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Axes analytiques</a>
+        <h1 class="text-2xl font-bold text-gray-900">
+            {% if isNew %}Nouvel Axe 2{% else %}Modifier {{ axe2.code }}{% endif %}
+        </h1>
+    </div>
+
+    <div class="bg-white rounded-lg shadow max-w-xl">
+        {{ form_start(form, {'attr': {'class': 'p-6 space-y-6'}}) }}
+            <div>
+                {{ form_label(form.axe1, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.axe1, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                {{ form_errors(form.axe1) }}
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    {{ form_label(form.code, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                    {{ form_widget(form.code, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 font-mono'}}) }}
+                    {{ form_errors(form.code) }}
+                </div>
+                <div>
+                    {{ form_label(form.ordre, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                    {{ form_widget(form.ordre, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                    {{ form_errors(form.ordre) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.libelle, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.libelle, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                {{ form_errors(form.libelle) }}
+            </div>
+
+            <div>
+                <label class="flex items-center gap-2">
+                    {{ form_widget(form.actif, {'attr': {'class': 'rounded border-gray-300 text-primary-600 focus:ring-primary-500'}}) }}
+                    <span class="text-sm font-medium text-gray-700">Actif</span>
+                </label>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t">
+                {% if not isNew %}
+                    <form action="{{ path('app_admin_axe2_delete', {id: axe2.id}) }}"
+                          method="post"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet axe ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ axe2.id) }}">
+                        <button type="submit" class="text-red-600 hover:text-red-700 text-sm font-medium">
+                            Supprimer
+                        </button>
+                    </form>
+                {% else %}
+                    <div></div>
+                {% endif %}
+
+                <div class="flex gap-3">
+                    <a href="{{ path('app_admin_axes') }}"
+                       class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700">
+                        {% if isNew %}Créer{% else %}Enregistrer{% endif %}
+                    </button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

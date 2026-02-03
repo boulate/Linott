@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Administration</h1>
+    </div>
+
+    <!-- Stats cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Utilisateurs actifs</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.users }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Périodes saisies</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.periodes }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-amber-100 text-amber-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Congés enregistrés</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.conges }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin menu -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="{{ path('app_admin_users') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
+            <div class="flex items-center mb-4">
+                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Utilisateurs</h3>
+            <p class="text-sm text-gray-500">Gérer les comptes utilisateurs</p>
+        </a>
+
+        <a href="{{ path('app_admin_sections') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
+            <div class="flex items-center mb-4">
+                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Sections</h3>
+            <p class="text-sm text-gray-500">Gérer les sections analytiques</p>
+        </a>
+
+        <a href="{{ path('app_admin_axes') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
+            <div class="flex items-center mb-4">
+                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Axes analytiques</h3>
+            <p class="text-sm text-gray-500">Gérer la hiérarchie des axes</p>
+        </a>
+
+        <a href="{{ path('app_admin_types_conge') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
+            <div class="flex items-center mb-4">
+                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Types de congés</h3>
+            <p class="text-sm text-gray-500">Gérer les types de congés</p>
+        </a>
+
+        <a href="{{ path('app_admin_configuration') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
+            <div class="flex items-center mb-4">
+                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Configuration</h3>
+            <p class="text-sm text-gray-500">Paramètres système</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,756 @@
+
+/*html {height:100%;}*/
+
+body 
+{
+	background-color:#e6e6e6;
+/*	height:100%;
+	min-height:100%;
+	margin: 0;padding: 0;*/
+}
+
+/*#sous_body {min-height:100%;}*/
+
+
+/********************************************************************************/
+/*				Lignes						*/
+/********************************************************************************/
+
+hr 
+{
+	color: #A4A4A4;
+	background-color: #A4A4A4;
+	border-color: #A4A4A4;
+	width: 80%;
+	border: 0px !important;
+	height: 1px !important ;
+	vertical-align: top; 
+}
+hr:after 
+{
+	
+}
+
+
+
+
+/********************************************************************************/
+/*			Input Text et nombres					*/
+/********************************************************************************/
+
+/*Tous les inputs dont l'ID contient "choix" (pour les choix axe 1, axe 2 et axe3)*/
+input[id*="choix"]
+{
+    background-color: white;
+    width: 250px!important;
+	height: 19px;
+   border: 1px!important;
+   border: solid #babdb6;
+   cursor: pointer;
+
+    border-radius:3px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+}
+
+[id*="affichage"]
+{
+	background-color:#D2D2D2 !important;
+	width:250px !important;
+	height: 19px;
+	text-decoration:none;
+	border: 1px solid #729fcf !important;
+	color: black;
+
+    	border-radius:5px;
+    	-webkit-border-radius:5px;
+    	-moz-border-radius:5px;
+	
+	transition-property: color, background;
+	transition-duration: 800ms;
+}
+[id*="affichage"]:hover
+{
+	background: #729fcf !important;
+	color: #D2D2D2;
+	cursor: pointer;
+	
+	transition-property: color, background;
+	transition-duration: 400ms;
+
+}
+
+
+/*Input text: Nombre d'heures à racheter dans administration par exemple*/
+input[type=text]
+{
+    background-color: #f7f7f7;
+  
+    text-align: center;
+    width: 75px;
+    outline:none;
+    
+    transition: all 0.25s ease-in-out;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    
+    border-radius:3px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    
+    border: 2px solid rgba(0,0,0, 0.0);    
+}
+input[type=text]:focus
+{
+    border: 2px solid #729fcf;
+    transition: all 0.25s;    
+}
+input[type="text"]:disabled
+{
+	color: black;
+	background-color:transparent;
+	width:35px !important;
+	border: 1px solid #babdb6;
+}
+
+input[type=number]
+{
+ /* Permet de ne pas afficher les petites fleches des input number */
+	-moz-appearance:textfield;
+	    
+	
+}
+
+/*Les totaux de chaque périodes. Boutton clicable pour supprimer la période.*/
+input[id*="totalAprem"], input[id*="totalMatin"]
+{
+	background-color:transparent !important;
+	width:50px !important;
+	border: 0px solid;
+	cursor: pointer;
+}
+
+/*Total journée, total semaine et total mois.*/
+input[id*="total"]
+{
+	background-color:transparent;
+	width:50px;
+	border: 1px solid #555 !important;
+	cursor: pointer;
+	text-align: center; 
+
+	
+	    border-radius:3px;
+	    -webkit-border-radius:3px;
+	    -moz-border-radius:3px;
+}
+input[id*="total_annuel"]
+{
+	width:60px;
+}
+input[id*="SommeTousUtilisateurs"]
+{
+	background-color:transparent;
+	width:75px;
+	border: 0px solid #555 !important;
+	cursor: default;
+	text-align: center; 
+	color: #001176;
+	font-size: small;
+}
+
+/*Les deux petites cases grisées dans les totaux (heures sup et heures totales) et la Petite zone affichant le nombre d'heures du contrat à coté du total de la semaine.*/
+input[id*="heures_sup"], input[id*="heures_totaux"], input[id*="heures_contrat"]
+{
+	background-color:transparent;
+	width:50px !important;
+	border: 0px solid !important;
+	text-align: center; 
+
+/*	border: 1px solid ;*/
+}
+
+/* Les champs de et a */
+input[id*="deMatin"], input[id*="aMatin"], input[id*="deAprem"], input[id*="aAprem"]
+{
+    text-align: center;
+    width: 75px;
+    height: 15px;
+    outline:none;
+    
+    transition: all 0.25s ease-in-out;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    
+    border-radius:3px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    
+    border: 2px solid rgba(0,0,0, 0.0) !important;
+}
+input[id*="deMatin"]:focus, input[id*="aMatin"]:focus, input[id*="deAprem"]:focus, input[id*="aAprem"]:focus
+{
+  /* box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 255, 1); */
+    border: 2px solid #729fcf !important;
+    transition: all 0.25s;    
+}
+
+/*Les input login et password sur la page d'accueil*/
+input[id="login"], input[id="password"] 
+{
+	background-color: white;
+	width: 120px!important;
+	height: 15px;
+	text-align: center; 
+	
+	border:1px solid #729fcf;
+
+	
+	border-radius:5px;
+    	-webkit-border-radius:5px;
+    	-moz-border-radius:5px;
+	
+	transition-property: border, width;
+	transition-duration: 800ms;
+	
+}
+input[id="login"]:focus, input[id="password"]:focus
+{
+	background-color: white;
+	width: 180px!important;
+	height: 20px;
+	text-align: center; 
+	
+	border:3px solid #729fcf;
+
+	
+	border-radius:5px;
+    	-webkit-border-radius:5px;
+    	-moz-border-radius:5px;
+	
+	transition-property: border, width;
+	transition-duration: 400ms;
+}
+
+/*Les petites cases vertes ou rouge de verification de la semaine.*/
+input[id*="valid_semaine"]
+{
+	background-color:transparent;
+	width:35px !important;
+	border: 1px solid black !important;
+    	border-radius:10px !important;
+    	-webkit-border-radius:10px;
+    	-moz-border-radius:10px;
+    	-moz-user-select: none;
+  	-webkit-user-select: none;
+  	cursor: pointer;
+	
+
+}
+
+/*Numéro de semaine présent juste avant les petites cases vertes et rouges de validation de la semaine.*/
+input[id*="numero_semaine"]
+{
+	background-color:transparent;
+	width:25px !important;
+	border: 0px !important;
+}
+
+/*Input text des filtres dans les récapitulatifs*/
+input[id*="filtre"]
+{
+	width:200px !important;
+	border: 1px solid #729fcf;
+}
+input[id*="vert"]
+{
+	background-color: #b0dd8d;
+
+}
+input[id*="nom_axe3_"], input[id*="nom_Axe"], input[id*="nom_Section"]
+{
+	width:390px;
+}
+
+/********************************************************************************/
+/*				Tableaux					*/
+/********************************************************************************/
+
+td 
+{
+	vertical-align: top;
+}
+
+tr[id*="deA"]
+{
+  
+}
+
+th 
+{
+	font-size: large;
+	color: #001176;
+}
+
+th[id*="titreTableau"]
+{
+	color: #555577;
+	font-size: medium;
+	vertical-align:center;
+	text-align: center;
+	height: 25px;
+}
+
+th[id*="matinAprem"]
+{
+	font-size: small !important ;
+	vertical-align:center;
+	text-align: center;
+	height: 30px;
+	
+	-webkit-border-top-left-radius: 30px;
+	-webkit-border-top-right-radius: 30px;
+	-moz-border-radius-topleft: 30px;
+	-moz-border-radius-topright: 30px;
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
+}
+
+th[id*="ongletVert"]
+{
+	width: 15%;
+	background-color: #B0DD8D;
+  
+	font-size: small !important ;
+	vertical-align:center;
+	text-align: center;
+	height: 30px;
+	
+	-webkit-border-top-left-radius: 30px;
+	-webkit-border-top-right-radius: 30px;
+	-moz-border-radius-topleft: 30px;
+	-moz-border-radius-topright: 30px;
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
+}
+th[id*="ongletBleu"]
+{
+	width: 15%;
+	background-color: #9BD6F9;
+  
+	font-size: small !important ;
+	vertical-align:center;
+	text-align: center;
+	height: 30px;
+	
+	-webkit-border-top-left-radius: 30px;
+	-webkit-border-top-right-radius: 30px;
+	-moz-border-radius-topleft: 30px;
+	-moz-border-radius-topright: 30px;
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
+}
+th[id*="fenetre_choix"]
+{
+	font-size: small !important ;
+	vertical-align:center;
+	text-align: center;
+	height: 30px;
+	width: 310px;
+	
+	-webkit-border-top-left-radius: 30px;
+	-webkit-border-top-right-radius: 30px;
+	-moz-border-radius-topleft: 30px;
+	-moz-border-radius-topright: 30px;
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
+}
+th[id*="petitTitre"]
+{
+	font-size: small !important ;
+
+}
+table 
+{
+
+}
+
+/* Format des tables sous les onglets */
+table[id*="tableOngletsVert"]
+{
+  	background-color: #B0DD8D;
+
+  	border-collapse: separate;
+	border-spacing: 3px;
+
+    -webkit-border-top-right-radius: 30px;
+	-moz-border-radius-topright: 30px;
+	border-top-right-radius: 30px;
+
+	box-shadow: 8px 8px 8px #999; 	
+}
+table[id*="tableVert"]
+{
+  	background-color: #B0DD8D;
+
+  	border-collapse: separate;
+	border-spacing: 3px;
+
+
+
+	box-shadow: 8px 8px 8px #999; 	
+}
+table[id*="tableVertListeFiches"] tr
+{
+   border:1px solid #000000;     /* Juste histoire de voir le tableau */
+
+/*	border-collapse: collapse;
+	border-spacing: 0px; */
+}
+table[id*="tableVertListeFiches"] tr:nth-child(2n)
+{
+	background: rgba(0, 0, 0, 0.06);
+	border-width:1px;
+	border-style:dotted;
+	border-color:black;
+}
+/*table[id*="tableVertListeFiches"] thead
+{
+	position-y: fixed;
+
+}
+table[id*="tableVertListeFiches"] tbody
+{
+	height:500px;
+	overflow-y: auto; 
+	overflow-x: auto;
+}*/
+
+
+
+table[id*="tableOngletsBleu"]
+{
+  	background-color: #9BD6F9;
+
+  	border-collapse: separate;
+	border-spacing: 3px;
+
+    -webkit-border-top-right-radius: 30px;
+	-moz-border-radius-topright: 30px;
+	border-top-right-radius: 30px;
+
+	box-shadow: 8px 8px 8px #999; 	
+}
+
+table[id*="tableBleu"]
+{
+  	background-color: #9BD6F9;
+
+  	border-collapse: separate;
+	border-spacing: 3px;
+
+
+	box-shadow: 8px 8px 8px #999; 	
+}
+
+table[id*="tableau_fenetre_choix"]
+{
+
+  	border-collapse: separate;
+	border-spacing: 1px;
+
+    -webkit-border-top-right-radius: 30px;
+	-moz-border-radius-topright: 30px;
+	border-top-right-radius: 30px;
+
+	box-shadow: 8px 8px 8px #999; 
+	
+}
+   
+
+table[id*="tableHeures"]
+{
+  	-webkit-border-top-right-radius: 30px;
+	-moz-border-radius-topright: 30px;
+	border-top-right-radius: 30px;
+	
+	border-collapse: separate;
+	border-spacing: 1px; /* Nombre de pixels d'espace horizontal (5px), vertical (8px) */
+        
+    border-style:solid;
+	border-width:0px;
+	/* border-color: grey; */
+	/* border-bottom-width:5px; */ 
+	
+  box-shadow: 8px 8px 8px #999;   
+}
+
+/* Table "globale" de la page (encadrant tout le site). C'est le dégradé gris sur les bords. */
+table[id*="tableGlobale"]
+{
+	background-color:#333338;
+	
+	background: #333338; /* Old browsers */
+	background: -moz-linear-gradient(top,  #333338 0%, #052b50 40%, #333338 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#333338), color-stop(40%,#052b50), color-stop(100%,#333338)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #333338 0%,#052b50 40%,#333338 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #333338 0%,#052b50 40%,#333338 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #333338 0%,#052b50 40%,#333338 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #333338 0%,#052b50 40%,#333338 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333338', endColorstr='#333338',GradientType=0 ); /* IE6-9 */
+
+	height: 1300px;
+	
+	/* Test pour correspondre à la largeur de la page */
+/*	width: 1900px;
+	min-width: 100%;
+	margin: 0;
+	padding: 0;*/
+
+		
+/*	height:100%;
+	min-height:100%;*/
+	
+
+}
+td[id*="tableGlobale"]
+{
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 10px;
+	background-color:#e6e6e6;
+	width: 1300px;
+	border: 13px !important;
+
+	background: #000000; /* Old browsers */
+	background: -moz-linear-gradient(left,  #000000 0%, #e6e6e6 1%, #e6e6e6 99%, #000000 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#000000), color-stop(1%,#e6e6e6), color-stop(99%,#e6e6e6), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  #000000 0%,#e6e6e6 1%,#e6e6e6 99%,#000000 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  #000000 0%,#e6e6e6 1%,#e6e6e6 99%,#000000 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  #000000 0%,#e6e6e6 1%,#e6e6e6 99%,#000000 100%); /* IE10+ */
+	background: linear-gradient(to right,  #000000 0%,#e6e6e6 1%,#e6e6e6 99%,#000000 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000',GradientType=1 ); /* IE6-9 */
+}
+
+td[id*="bonjour"]
+{
+	font-size: medium !important ;
+	 font-weight:bold;
+	 color:#729fcf;
+	vertical-align:center !important;
+	text-align:left;
+	 text-shadow: 1px 1px #000000;
+	/* letter-spacing:2px; */
+	 
+}
+
+
+/********************************************************************************/
+/*			Select (liste déroulante)				*/
+/********************************************************************************/
+
+select[id*="id_select_section"]
+{
+	width: 185px;
+
+	
+}
+
+/********************************************************************************/
+/*				Boutons					*/
+/********************************************************************************/
+
+/*Boutons de stats (récapitulatifs), retour sur chaque page autre que la page principale et les boutons valider des stats et admin. !!! ATTENTION: Pas les boutons suivants, précédents, administration, déconnexion et validation */
+input[id*="stats"], input[id*="retour"], input[id*="bouton"]
+{
+	background-color:#D2D2D2;
+	width:110px !important;
+	text-decoration:none;
+	border: 2px solid #729fcf !important;
+	color: black;
+
+    	border-radius:5px;
+    	-webkit-border-radius:5px;
+    	-moz-border-radius:5px;
+	
+	transition-property: color, background;
+	transition-duration: 800ms;
+}
+/*Boutons de stats (récapitulatifs), retour sur chaque page autre que la page principale et les boutons valider des stats et admin. !!! ATTENTION: Pas les boutons suivants, précédents, administration, déconnexion et validation */
+input[id*="stats"]:hover, input[id*="retour"]:hover, input[id*="bouton"]:hover
+{
+	background: #729fcf !important;
+	color: #D2D2D2;
+	cursor: pointer;
+	
+	transition-property: color, background;
+	transition-duration: 400ms;
+
+}
+
+/*Boutons "valider" de la page d'accueil, les boutons suivants et précédents du calendrier, le bouton administration et le bouton déconnexion*/
+input[type=button], input[type=submit]
+{
+  	background:#D2D2D2;
+	width:110px;
+	text-align:center;
+	vertical-align:middle;
+	text-decoration:none;
+	border: 2px solid #729fcf;
+	color: black;
+
+    	border-radius:5px;
+    	-webkit-border-radius:5px;
+    	-moz-border-radius:5px;
+	
+	transition-property: color, background;
+	transition-duration: 800ms;
+	
+
+	
+}
+/*Boutons "valider" de la page d'accueil, les boutons suivants et précédents du calendrier, le bouton administration et le bouton déconnexion*/
+input[type=button]:hover, input[type=submit]:hover
+{
+	background: #729fcf;
+	color: #D2D2D2;
+	cursor: pointer;
+	
+	transition-property: color, background;
+	transition-duration: 400ms;
+
+}
+
+input[id*="jour_non_valide"]
+{
+	width:35px;
+	background:#D2D2D2;
+	/*text-align:center;
+	vertical-align:middle;
+	text-decoration:none;
+	border: 2px solid #729fcf;
+	color: black;
+	
+    	border-radius:10px !important;
+    	-webkit-border-radius:10px;
+    	-moz-border-radius:10px; */
+	
+	border: 1px solid black;
+    	border-radius:10px !important;
+    	-webkit-border-radius:10px;
+    	-moz-border-radius:10px;
+    	-moz-user-select: none;
+  	-webkit-user-select: none;
+
+	
+	transition-property: all;
+	transition-duration: 800ms;	
+}
+input[id*="jour_non_valide"]:hover
+{
+  	background:#D2D2D2;
+	width:330px;
+	text-align:center;
+	vertical-align:middle;
+	text-decoration:none;
+	border: 1px solid #729fcf;
+	color: black;
+	cursor: pointer;
+	
+
+	
+	transition-property: all;
+	transition-duration: 400ms;
+	
+}
+
+
+
+
+/* Input du calendrier */
+#datepicker 
+{	background-color: #ffffff;
+	width: 187px;
+	border: 0px;
+	
+	border-radius:5px;
+    	-webkit-border-radius:5px;
+    	-moz-border-radius:5px;
+}
+#datepicker:focus
+{
+	background-color: #545758;
+	color: #EEE;
+	
+	-webkit-border-radius: 5px;
+	-webkit-border-bottom-right-radius: 0px;
+	-webkit-border-bottom-left-radius: 0px;
+	-moz-border-radius: 5px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	border-radius: 5px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+
+/* Permet de masquer les fleches des "input number" dans Chrome */
+/* input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; *//* <-- Apparently some margin are still there even though it's hidden */
+
+
+table[id="testScroll"]
+{	
+	display: block;
+	width: 1250px;
+	/*width: 30%;*/
+	height: 590px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+
+table[id*="tableVertListeFiches"] thead
+{
+	display:block;
+	overflow: fixed;
+	direction: rtl;
+
+
+background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.20) 12%, rgba(0,0,0,0.20) 88%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(12%,rgba(0,0,0,0.20)), color-stop(88%,rgba(0,0,0,0.20)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.20) 12%,rgba(0,0,0,0.20) 88%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.20) 12%,rgba(0,0,0,0.20) 88%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.20) 12%,rgba(0,0,0,0.20) 88%,rgba(0,0,0,0) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.20) 12%,rgba(0,0,0,0.20) 88%,rgba(0,0,0,0) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+
+
+
+
+
+}
+
+table[id*="tableVertListeFiches"] tbody 
+{
+	height: 500px;
+	display:block;
+	overflow: auto;
+	direction: rtl;
+	text-align: left;
+}
+
+
+div[id="numero_action"]
+{
+	color: #555577;
+	font-size: small;
+	vertical-align:center;
+	text-align: left;
+	/* height: 25px; */
+	
+}
+

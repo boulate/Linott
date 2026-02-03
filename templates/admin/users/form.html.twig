@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if isNew %}Nouvel utilisateur{% else %}Modifier {{ user.fullName }}{% endif %} - Administration - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="mb-6">
+        <a href="{{ path('app_admin_users') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Utilisateurs</a>
+        <h1 class="text-2xl font-bold text-gray-900">
+            {% if isNew %}Nouvel utilisateur{% else %}Modifier {{ user.fullName }}{% endif %}
+        </h1>
+    </div>
+
+    <div class="bg-white rounded-lg shadow max-w-2xl">
+        {{ form_start(form, {'attr': {'class': 'p-6 space-y-6'}}) }}
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    {{ form_label(form.prenom, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                    {{ form_widget(form.prenom, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                    {{ form_errors(form.prenom) }}
+                </div>
+                <div>
+                    {{ form_label(form.nom, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                    {{ form_errors(form.nom) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.email, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.email, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                {{ form_errors(form.email) }}
+            </div>
+
+            <div>
+                {{ form_label(form.plainPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.plainPassword, {'attr': {'class': 'w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500'}}) }}
+                {{ form_errors(form.plainPassword) }}
+            </div>
+
+            <div>
+                {{ form_label(form.roles, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                <div class="space-y-2">
+                    {% for child in form.roles %}
+                        <label class="flex items-center gap-2">
+                            {{ form_widget(child, {'attr': {'class': 'rounded border-gray-300 text-primary-600 focus:ring-primary-500'}}) }}
+                            <span class="text-sm text-gray-700">{{ child.vars.label }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                {{ form_errors(form.roles) }}
+            </div>
+
+            <div>
+                <label class="flex items-center gap-2">
+                    {{ form_widget(form.actif, {'attr': {'class': 'rounded border-gray-300 text-primary-600 focus:ring-primary-500'}}) }}
+                    <span class="text-sm font-medium text-gray-700">{{ form_label(form.actif) }}</span>
+                </label>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t">
+                {% if not isNew %}
+                    <form action="{{ path('app_admin_users_delete', {id: user.id}) }}"
+                          method="post"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                        <button type="submit" class="text-red-600 hover:text-red-700 text-sm font-medium">
+                            Supprimer
+                        </button>
+                    </form>
+                {% else %}
+                    <div></div>
+                {% endif %}
+
+                <div class="flex gap-3">
+                    <a href="{{ path('app_admin_users') }}"
+                       class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700">
+                        {% if isNew %}Créer{% else %}Enregistrer{% endif %}
+                    </button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

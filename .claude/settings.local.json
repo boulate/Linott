@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "WebSearch",
+      "Bash(docker compose build:*)",
+      "Bash(docker compose:*)",
+      "Bash(sudo chown:*)",
+      "Bash(curl:*)"
+    ]
+  }
+}

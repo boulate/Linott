@@ -1,0 +1,68 @@
+<div class="bg-white rounded-lg shadow">
+    <!-- Header with navigation -->
+    <div class="flex items-center justify-between p-4 border-b">
+        <button hx-get="{{ path('app_calendrier', {year: calendarData.previousMonth.format('Y'), month: calendarData.previousMonth.format('n')}) }}"
+                hx-target="#calendar-container"
+                hx-push-url="true"
+                class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+
+        <h2 class="text-xl font-semibold text-gray-900">
+            {{ calendarData.monthName|capitalize }} {{ calendarData.year }}
+        </h2>
+
+        <button hx-get="{{ path('app_calendrier', {year: calendarData.nextMonth.format('Y'), month: calendarData.nextMonth.format('n')}) }}"
+                hx-target="#calendar-container"
+                hx-push-url="true"
+                class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Days of week header -->
+    <div class="grid grid-cols-7 border-b">
+        {% for dayName in ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] %}
+            <div class="p-2 text-center text-sm font-medium text-gray-500 {% if loop.index > 5 %}bg-gray-50{% endif %}">
+                {{ dayName }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Calendar grid -->
+    <div class="grid grid-cols-7">
+        {% for week in calendarData.weeks %}
+            {% for day in week %}
+                <div class="min-h-24 border-b border-r p-1 {% if not day.isCurrentMonth %}bg-gray-50 text-gray-400{% elseif day.isWeekend %}bg-gray-50{% endif %} {% if day.isToday %}ring-2 ring-inset ring-primary-500{% endif %}">
+                    <div class="text-sm {% if day.isToday %}font-bold text-primary-600{% endif %}">
+                        {{ day.date.format('j') }}
+                    </div>
+
+                    {% if day.conges|length > 0 %}
+                        <div class="mt-1 space-y-1">
+                            {% for conge in day.conges %}
+                                <button hx-get="{{ path('app_calendrier_conge_edit', {id: conge.id}) }}"
+                                        hx-target="#conge-modal-content"
+                                        hx-swap="innerHTML"
+                                        @click="$dispatch('open-modal')"
+                                        class="block w-full text-left px-1 py-0.5 text-xs rounded truncate"
+                                        style="background-color: {{ conge.type.couleur }}20; color: {{ conge.type.couleur }}; border-left: 3px solid {{ conge.type.couleur }};">
+                                    {{ conge.type.code }}
+                                </button>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Update compteurs when calendar changes -->
+<div id="compteurs-container" hx-swap-oob="true">
+    {% include 'calendrier/_compteurs.html.twig' %}
+</div>

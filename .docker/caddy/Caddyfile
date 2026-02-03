@@ -1,0 +1,25 @@
+:80 {
+    root * /var/www/html/public
+
+    # Encode responses
+    encode gzip
+
+    # PHP-FPM
+    php_fastcgi php:9000
+
+    # Serve static files
+    file_server
+
+    # Symfony routing - try files, then pass to index.php
+    @notStatic {
+        not path /bundles/* /build/* *.css *.js *.ico *.png *.jpg *.jpeg *.gif *.svg *.woff *.woff2
+    }
+
+    try_files {path} /index.php?{query}
+
+    # Log
+    log {
+        output stdout
+        format console
+    }
+}

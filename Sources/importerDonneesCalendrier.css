@@ -1,0 +1,46 @@
+body {background-color:#f7f7f7;}
+
+/********************************************************************************/
+/*			Input Text et nombres					*/
+/********************************************************************************/
+
+/*Tous les inputs dont l'ID contient "choix" (pour les choix axe 1, axe 2 et axe3)*/
+div#calendrier
+{
+	width: 100%;
+	border: 1;
+}
+
+[id*="table_calendrier_lundi"], [id*="table_calendrier_mardi"], [id*="table_calendrier_mercredi"], [id*="table_calendrier_jeudi"], [id*="table_calendrier_vendredi"]
+{
+	background-color: grey;
+	width: 16%;
+	height: 100px;
+	
+	background: rgb(235,241,246); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(235,241,246,1) 0%, rgba(171,211,238,1) 50%, rgba(137,195,235,1) 51%, rgba(213,235,251,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(235,241,246,1)), color-stop(50%,rgba(171,211,238,1)), color-stop(51%,rgba(137,195,235,1)), color-stop(100%,rgba(213,235,251,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebf1f6', endColorstr='#d5ebfb',GradientType=0 ); /* IE6-9 */
+
+
+
+}
+[id*="table_calendrier_samedi"], [id*="table_calendrier_dimanche"]
+{
+	background-color: white;
+	width: 10%;
+	
+	background: rgb(237,241,245); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(237,241,245,1) 0%, rgba(182,210,228,1) 50%, rgba(152,193,220,1) 51%, rgba(219,234,245,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(237,241,245,1)), color-stop(50%,rgba(182,210,228,1)), color-stop(51%,rgba(152,193,220,1)), color-stop(100%,rgba(219,234,245,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(237,241,245,1) 0%,rgba(182,210,228,1) 50%,rgba(152,193,220,1) 51%,rgba(219,234,245,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(237,241,245,1) 0%,rgba(182,210,228,1) 50%,rgba(152,193,220,1) 51%,rgba(219,234,245,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(237,241,245,1) 0%,rgba(182,210,228,1) 50%,rgba(152,193,220,1) 51%,rgba(219,234,245,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(237,241,245,1) 0%,rgba(182,210,228,1) 50%,rgba(152,193,220,1) 51%,rgba(219,234,245,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#edf1f5', endColorstr='#dbeaf5',GradientType=0 ); /* IE6-9 */
+
+}

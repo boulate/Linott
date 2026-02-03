@@ -1,0 +1,29 @@
+<div id="compteurs-container" class="space-y-3">
+    {% for compteur in compteurs %}
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full" style="background-color: {{ compteur.type.couleur }}"></span>
+                <span class="text-sm text-gray-700">{{ compteur.type.libelle }}</span>
+            </div>
+            <div class="text-sm">
+                {% if compteur.allocation > 0 %}
+                    <span class="font-medium {% if compteur.restant < 0 %}text-red-600{% elseif compteur.restant <= 3 %}text-amber-600{% else %}text-gray-900{% endif %}">
+                        {{ compteur.restant }}
+                    </span>
+                    <span class="text-gray-500">/ {{ compteur.allocation }}</span>
+                {% else %}
+                    <span class="text-gray-500">{{ compteur.pris }} pris</span>
+                {% endif %}
+            </div>
+        </div>
+        {% if compteur.allocation > 0 %}
+            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                {% set percentage = ((compteur.allocation - compteur.restant) / compteur.allocation * 100)|round %}
+                <div class="h-1.5 rounded-full {% if compteur.restant < 0 %}bg-red-500{% elseif compteur.restant <= 3 %}bg-amber-500{% else %}bg-primary-500{% endif %}"
+                     style="width: {{ percentage > 100 ? 100 : percentage }}%"></div>
+            </div>
+        {% endif %}
+    {% else %}
+        <p class="text-sm text-gray-500">Aucun compteur configuré</p>
+    {% endfor %}
+</div>

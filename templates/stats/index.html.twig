@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Statistiques</h1>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+        <form method="get" class="flex flex-wrap items-end gap-4">
+            <div>
+                <label for="start" class="block text-sm font-medium text-gray-700 mb-1">Date début</label>
+                <input type="date" name="start" id="start"
+                       value="{{ startDate|date('Y-m-d') }}"
+                       class="rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+            </div>
+            <div>
+                <label for="end" class="block text-sm font-medium text-gray-700 mb-1">Date fin</label>
+                <input type="date" name="end" id="end"
+                       value="{{ endDate|date('Y-m-d') }}"
+                       class="rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+            </div>
+            <button type="submit"
+                    class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                Filtrer
+            </button>
+            <a href="{{ path('app_stats_export', {start: startDate|date('Y-m-d'), end: endDate|date('Y-m-d')}) }}"
+               class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                Exporter CSV
+            </a>
+        </form>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Répartition par section -->
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-semibold text-gray-900 mb-4">Répartition par section</h3>
+            <div class="aspect-square max-w-xs mx-auto">
+                <canvas id="sectionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Évolution hebdomadaire -->
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-semibold text-gray-900 mb-4">Évolution hebdomadaire</h3>
+            <div class="h-64">
+                <canvas id="weeklyChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table détaillée -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="px-4 py-3 border-b bg-gray-50">
+            <h3 class="font-semibold text-gray-900">Détail par section</h3>
+        </div>
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Section</th>
+                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-500">Nb périodes</th>
+                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-500">Total heures</th>
+                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-500">%</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% set totalMinutes = 0 %}
+                {% set totalCount = 0 %}
+                {% for stat in statsBySection %}
+                    {% set totalMinutes = totalMinutes + stat.totalMinutes %}
+                    {% set totalCount = totalCount + stat.count %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3">
+                            <div class="flex items-center gap-2">
+                                <span class="font-medium text-gray-900">{{ stat.section.code }}</span>
+                                <span class="text-gray-500">{{ stat.section.libelle }}</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-right text-gray-600">{{ stat.count }}</td>
+                        <td class="px-4 py-3 text-right font-medium text-gray-900">{{ stat.totalFormatted }}</td>
+                        <td class="px-4 py-3 text-right">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                                {{ stat.percentage }}%
+                            </span>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="px-4 py-8 text-center text-gray-500">
+                            Aucune donnée pour cette période
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            {% if statsBySection|length > 0 %}
+            <tfoot class="bg-gray-50 font-semibold">
+                <tr>
+                    <td class="px-4 py-3 text-gray-900">Total</td>
+                    <td class="px-4 py-3 text-right text-gray-900">{{ totalCount }}</td>
+                    <td class="px-4 py-3 text-right text-gray-900">{{ (totalMinutes / 60)|number_format(1) }}h</td>
+                    <td class="px-4 py-3 text-right text-gray-900">100%</td>
+                </tr>
+            </tfoot>
+            {% endif %}
+        </table>
+    </div>
+
+    <!-- Weekly evolution table -->
+    <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
+        <div class="px-4 py-3 border-b bg-gray-50">
+            <h3 class="font-semibold text-gray-900">Évolution par semaine</h3>
+        </div>
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Semaine</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Période</th>
+                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-500">Heures</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for week in weeklyEvolution %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ week.label }}</td>
+                        <td class="px-4 py-3 text-gray-600">
+                            {{ week.weekStart|date('d/m') }} - {{ week.weekEnd|date('d/m') }}
+                        </td>
+                        <td class="px-4 py-3 text-right font-medium text-gray-900">{{ week.totalHours }}h</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="px-4 py-8 text-center text-gray-500">
+                            Aucune donnée pour cette période
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Section pie chart
+    const sectionCtx = document.getElementById('sectionChart');
+    if (sectionCtx) {
+        new Chart(sectionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ chartLabels|raw }},
+                datasets: [{
+                    data: {{ chartData|raw }},
+                    backgroundColor: {{ chartColors|raw }},
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+
+    // Weekly evolution line chart
+    const weeklyCtx = document.getElementById('weeklyChart');
+    if (weeklyCtx) {
+        new Chart(weeklyCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ weeklyLabels|raw }},
+                datasets: [{
+                    label: 'Heures',
+                    data: {{ weeklyData|raw }},
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Heures'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

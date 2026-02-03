@@ -1,0 +1,9 @@
+Realisateur: Menu déroulant
+
+Délai prévisionnel / realisation = text
+
+Visa du responsable = menu déroulant initiales
+
+En dessous de analyse complémentaire des causes: Un bouton radio oui/non "action sur produit/service" avec un petit champ de text pour détailler en dessous.
+
+Cloture le : champ de texte.

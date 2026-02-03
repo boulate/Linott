@@ -1,0 +1,48 @@
+body
+{
+   width: 1400px;
+   margin: auto; /* Pour centrer notre page */
+   margin-top: 20px; /* Pour éviter de coller avec le haut de la fenêtre du navigateur. Essayez d'enlever pour voir ! */
+   margin-bottom: 20px;    /* Idem pour le bas du navigateur */
+
+}
+
+#header
+{
+   width: 1400px;
+   height: 160px;
+/*   background-image: url("images/banniere.png");*/
+   background-repeat: no-repeat;
+   margin-bottom: 10px;
+	margin-left: 60px;
+}
+
+#menu
+{
+   float: left; /* Le menu flottera à gauche */
+   width: 120px; /* Très important : donner une taille au menu */
+   background-color: #626262;
+   background-image: url("images/motif.png");
+   background-repeat: repeat-x;
+   
+   border: 2px solid black;
+   margin-bottom: 20px;
+}
+
+/* .element_menu
+{
+   background-color: #626262;
+   background-repeat: repeat-x;
+   
+   border: 2px solid black;
+   
+   margin-bottom: 20px; 
+Pour éviter que les éléments du menu ne soient trop collés
+}
+*/
+
+#corps
+{
+	float: center;
+	margin-left: 134px;
+}

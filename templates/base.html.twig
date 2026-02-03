@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-gray-100">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Linott{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⏱️</text></svg>">
+
+        {% block stylesheets %}
+            <script src="https://cdn.tailwindcss.com"></script>
+            <script>
+                tailwind.config = {
+                    theme: {
+                        extend: {
+                            colors: {
+                                primary: {
+                                    50: '#eff6ff',
+                                    100: '#dbeafe',
+                                    200: '#bfdbfe',
+                                    300: '#93c5fd',
+                                    400: '#60a5fa',
+                                    500: '#3b82f6',
+                                    600: '#2563eb',
+                                    700: '#1d4ed8',
+                                    800: '#1e40af',
+                                    900: '#1e3a8a',
+                                }
+                            }
+                        }
+                    }
+                }
+            </script>
+            <style type="text/tailwindcss">
+                @layer components {
+                    .btn {
+                        @apply inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors duration-200;
+                    }
+                    .btn-primary {
+                        @apply bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500;
+                    }
+                    .btn-secondary {
+                        @apply bg-white text-gray-700 border-gray-300 hover:bg-gray-50 focus-visible:ring-primary-500;
+                    }
+                    .btn-danger {
+                        @apply bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500;
+                    }
+                    .form-input {
+                        @apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm;
+                    }
+                    .form-select {
+                        @apply block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm;
+                    }
+                    .form-label {
+                        @apply block text-sm font-medium text-gray-700 mb-1;
+                    }
+                    .card {
+                        @apply bg-white rounded-lg shadow;
+                    }
+                    .htmx-request .htmx-indicator {
+                        @apply opacity-100;
+                    }
+                    .htmx-indicator {
+                        @apply opacity-0 transition-opacity duration-200;
+                    }
+                }
+            </style>
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Reinitialize Alpine.js components after HTMX swaps
+                    document.body.addEventListener('htmx:afterSwap', function(evt) {
+                        if (typeof Alpine !== 'undefined') {
+                            Alpine.initTree(evt.detail.target);
+                        }
+                    });
+                });
+            </script>
+        {% endblock %}
+    </head>
+    <body class="h-full" hx-boost="true">
+        {% block body %}{% endblock %}
+    </body>
+</html>

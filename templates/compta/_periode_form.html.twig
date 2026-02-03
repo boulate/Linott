@@ -1,0 +1,113 @@
+<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-40"
+     x-data="{ open: true }"
+     x-show="open"
+     x-transition:enter="ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0">
+</div>
+
+<div class="fixed inset-0 z-50 overflow-y-auto"
+     x-data="{ open: true }"
+     x-show="open"
+     @keydown.escape.window="document.getElementById('modal-container').innerHTML = ''">
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+
+            {{ form_start(form, {attr: {
+                class: 'space-y-4',
+                'hx-post': form.vars.action,
+                'hx-target': '#fiche-container',
+                'hx-swap': 'innerHTML',
+                'hx-on::after-request': "if(event.detail.successful && event.detail.requestConfig.verb === 'post') document.getElementById('modal-container').innerHTML = ''"
+            }}) }}
+
+            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <h3 class="text-lg font-semibold leading-6 text-gray-900 mb-4">
+                    {% if isEdit %}Modifier la periode{% else %}Nouvelle periode{% endif %}
+                </h3>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        {{ form_label(form.heureDebut) }}
+                        {{ form_widget(form.heureDebut) }}
+                        {{ form_errors(form.heureDebut) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.heureFin) }}
+                        {{ form_widget(form.heureFin) }}
+                        {{ form_errors(form.heureFin) }}
+                    </div>
+                </div>
+
+                <div>
+                    {{ form_label(form.section) }}
+                    {{ form_widget(form.section, {attr: {
+                        'hx-get': path('api_axes1'),
+                        'hx-target': '#axe1-container',
+                        'hx-include': 'this',
+                        'hx-trigger': 'change'
+                    }}) }}
+                    {{ form_errors(form.section) }}
+                </div>
+
+                <div id="axe1-container">
+                    {{ form_label(form.axe1) }}
+                    {{ form_widget(form.axe1, {attr: {
+                        'hx-get': path('api_axes2'),
+                        'hx-target': '#axe2-container',
+                        'hx-include': 'this',
+                        'hx-trigger': 'change'
+                    }}) }}
+                    {{ form_errors(form.axe1) }}
+                </div>
+
+                <div id="axe2-container">
+                    {{ form_label(form.axe2) }}
+                    {{ form_widget(form.axe2, {attr: {
+                        'hx-get': path('api_axes3'),
+                        'hx-target': '#axe3-container',
+                        'hx-include': 'this',
+                        'hx-trigger': 'change'
+                    }}) }}
+                    {{ form_errors(form.axe2) }}
+                </div>
+
+                <div id="axe3-container">
+                    {{ form_label(form.axe3) }}
+                    {{ form_widget(form.axe3) }}
+                    {{ form_errors(form.axe3) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.commentaire) }}
+                    {{ form_widget(form.commentaire) }}
+                    {{ form_errors(form.commentaire) }}
+                </div>
+
+                {{ form_rest(form) }}
+            </div>
+
+            <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <button type="submit" class="btn btn-primary sm:ml-3">
+                    {% if isEdit %}Modifier{% else %}Ajouter{% endif %}
+                </button>
+                <button type="button"
+                        class="btn btn-secondary mt-3 sm:mt-0"
+                        onclick="document.getElementById('modal-container').innerHTML = ''">
+                    Annuler
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

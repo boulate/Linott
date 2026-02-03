@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 6ebbb38f7aebe316c6eab1e38c905c746f1c2b54 Boulate <boulate2@gmail.com> 1418142038 +0100	commit (initial): First commit on bitbucket
+6ebbb38f7aebe316c6eab1e38c905c746f1c2b54 566eb9e651de680826595ac067c37a30befce74d Boulate <boulate2@gmail.com> 1418142231 +0100	commit: Commit of conf empty conf files
+566eb9e651de680826595ac067c37a30befce74d f78a365b2889f8210d1f2a8fbaac4af417cbcd82 Boulate <boulate2@gmail.com> 1418142459 +0100	commit: Change .gitignore to ignore Configuration/ directory

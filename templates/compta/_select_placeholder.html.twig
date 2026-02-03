@@ -1,0 +1,6 @@
+<select name="{{ name }}"
+        class="form-select"
+        data-cascade="{{ dataAttribute|default('') }}"
+        {% if disabled|default(false) %}disabled{% endif %}>
+    <option value="">{{ placeholder }}</option>
+</select>

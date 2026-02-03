@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Axes analytiques - Administration - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="mb-6">
+        <a href="{{ path('app_admin') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Administration</a>
+        <h1 class="text-2xl font-bold text-gray-900">Axes analytiques</h1>
+    </div>
+
+    <!-- Section filter -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+        <form method="get" class="flex flex-wrap items-end gap-4">
+            <div>
+                <label for="section" class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+                <select name="section" id="section"
+                        onchange="this.form.submit()"
+                        class="rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                    {% for section in sections %}
+                        <option value="{{ section.id }}" {% if selectedSection and selectedSection.id == section.id %}selected{% endif %}>
+                            {{ section.code }} - {{ section.libelle }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Axe 1 -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-4 py-3 border-b bg-gray-50 flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Axe 1</h3>
+                {% if selectedSection %}
+                    <a href="{{ path('app_admin_axe1_new', {section: selectedSection.id}) }}"
+                       class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                        + Ajouter
+                    </a>
+                {% endif %}
+            </div>
+            <div class="divide-y divide-gray-200">
+                {% for axe1 in axes1 %}
+                    <div class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+                        <a href="{{ path('app_admin_axes', {section: selectedSection.id, axe1: axe1.id}) }}"
+                           class="flex-1 {% if selectedAxe1 and selectedAxe1.id == axe1.id %}text-primary-600 font-medium{% else %}text-gray-900{% endif %}">
+                            <span class="font-mono">{{ axe1.code }}</span>
+                            <span class="text-gray-500 ml-1">{{ axe1.libelle }}</span>
+                        </a>
+                        <a href="{{ path('app_admin_axe1_edit', {id: axe1.id}) }}"
+                           class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="px-4 py-8 text-center text-gray-500 text-sm">
+                        {% if selectedSection %}
+                            Aucun axe 1 pour cette section
+                        {% else %}
+                            Sélectionnez une section
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Axe 2 -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-4 py-3 border-b bg-gray-50 flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Axe 2</h3>
+                {% if selectedAxe1 %}
+                    <a href="{{ path('app_admin_axe2_new', {axe1: selectedAxe1.id}) }}"
+                       class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                        + Ajouter
+                    </a>
+                {% endif %}
+            </div>
+            <div class="divide-y divide-gray-200">
+                {% for axe2 in axes2 %}
+                    <div class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+                        <a href="{{ path('app_admin_axes', {section: selectedSection.id, axe1: selectedAxe1.id, axe2: axe2.id}) }}"
+                           class="flex-1 {% if selectedAxe2 and selectedAxe2.id == axe2.id %}text-primary-600 font-medium{% else %}text-gray-900{% endif %}">
+                            <span class="font-mono">{{ axe2.code }}</span>
+                            <span class="text-gray-500 ml-1">{{ axe2.libelle }}</span>
+                        </a>
+                        <a href="{{ path('app_admin_axe2_edit', {id: axe2.id}) }}"
+                           class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="px-4 py-8 text-center text-gray-500 text-sm">
+                        {% if selectedAxe1 %}
+                            Aucun axe 2 pour cet axe 1
+                        {% else %}
+                            Sélectionnez un axe 1
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Axe 3 -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-4 py-3 border-b bg-gray-50 flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Axe 3</h3>
+                {% if selectedAxe2 %}
+                    <a href="{{ path('app_admin_axe3_new', {axe2: selectedAxe2.id}) }}"
+                       class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                        + Ajouter
+                    </a>
+                {% endif %}
+            </div>
+            <div class="divide-y divide-gray-200">
+                {% for axe3 in axes3 %}
+                    <div class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+                        <div class="flex-1 text-gray-900">
+                            <span class="font-mono">{{ axe3.code }}</span>
+                            <span class="text-gray-500 ml-1">{{ axe3.libelle }}</span>
+                        </div>
+                        <a href="{{ path('app_admin_axe3_edit', {id: axe3.id}) }}"
+                           class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="px-4 py-8 text-center text-gray-500 text-sm">
+                        {% if selectedAxe2 %}
+                            Aucun axe 3 pour cet axe 2
+                        {% else %}
+                            Sélectionnez un axe 2
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

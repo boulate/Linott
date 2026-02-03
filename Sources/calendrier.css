@@ -1,0 +1,242 @@
+body {background-color:#f7f7f7;}
+
+/********************************************************************************/
+/*			Input Text et nombres					*/
+/********************************************************************************/
+input[id="datepicker"]
+{
+	background-color: #F9F9F9 !important;
+	width: 187px !important;
+}
+
+input[id*="text_"]
+{
+	border: 0px!important;
+}
+
+input[id*="description_evenement"]
+{
+	width: 250px;
+}
+
+/********************************************************************************/
+/*			Input tables						*/
+/********************************************************************************/
+
+
+table[id="table_calendrier_global"]
+{
+	width: 100%;
+	border: 3!important;
+	border-color: red!important;
+	color: #F9F9F9;
+	/* box-shadow: 8px 8px 8px  #999; */
+	-moz-box-shadow: 0 0 15px 15px #999;
+	-webkit-box-shadow: 0 0 15px 15px #999;
+	box-shadow: 0 0 15px 15px #999;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 10px;
+	
+	border-collapse: separate;
+	border-spacing: 2px; /* Nombre de pixels d'espace horizontal (5px), vertical (8px) */
+}
+
+/* Table se rajoutant via javascript pour indiquer les personnes en congé chaque jour*/
+table[id*="text_evenement_"]
+{
+	height: 1px;
+	/* width: 100%; */
+	
+	font-size: 9.5px;
+	
+	text-align: center;
+
+	color: #222 ;
+
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	border-radius: 5px; 
+
+	border-collapse: separate; 
+	border-spacing: 0px;
+	margin: 1px;
+	margin-left: auto;
+	margin-right: auto;
+
+	/* white-space: nowrap; */
+	/*    overflow:hidden; */
+	/* table-layout:fixed; */
+}
+/* Table se rajoutant via javascript pour indiquer les personnes présentes chaque jour*/
+table[id*="presence"]
+{
+	height: 1px;
+	/* width: 100%; */
+	
+	font-size: 10px;
+	
+	text-align: center;
+
+	color: #222 ;
+
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	border-radius: 5px; 
+
+	border-collapse: collapse; 
+	border-spacing: 0px;
+	margin: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+
+
+	/* white-space: nowrap; */
+	/*    overflow:hidden; */
+	/* table-layout:fixed; */
+}
+table[id*="valide_evenement_"]
+{
+	height: 1px;
+	width: 1px;
+	
+	font-size: 12px;
+	/*   font-weight: bold; */
+	
+	color:black;
+	
+	text-align: center;
+
+	border-collapse: collapse; 
+	border-spacing: 0px;
+	margin: 0px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table[id="preferences_calendrier"]
+{
+	line-height: 25px;
+}
+
+td.semaine
+{
+	background-color: grey;
+	width: 16%;
+	height: 100px;
+	
+	background: rgb(176,221,141); /* Old browsers */
+	background: -moz-linear-gradient(left,  rgba(176,221,141,1) 10%, rgba(197,242,155,1) 55%, rgba(197,242,155,1) 65%, rgba(176,221,141,1) 90%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(10%,rgba(176,221,141,1)), color-stop(55%,rgba(197,242,155,1)), color-stop(65%,rgba(197,242,155,1)), color-stop(90%,rgba(176,221,141,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgba(176,221,141,1) 10%,rgba(197,242,155,1) 55%,rgba(197,242,155,1) 65%,rgba(176,221,141,1) 90%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgba(176,221,141,1) 10%,rgba(197,242,155,1) 55%,rgba(197,242,155,1) 65%,rgba(176,221,141,1) 90%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgba(176,221,141,1) 10%,rgba(197,242,155,1) 55%,rgba(197,242,155,1) 65%,rgba(176,221,141,1) 90%); /* IE10+ */
+	background: linear-gradient(to right,  rgba(176,221,141,1) 10%,rgba(197,242,155,1) 55%,rgba(197,242,155,1) 65%,rgba(176,221,141,1) 90%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b0dd8d', endColorstr='#b0dd8d',GradientType=1 ); /* IE6-9 */
+
+
+	border: 2px solid #E6E6E6;
+		
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	
+	transition-property: border, width, transform;
+	transition-duration: 0ms;
+}
+td.aujourdhui
+{ 
+	background: rgb(168,168,168); /* Old browsers */
+	background: -moz-linear-gradient(left,  rgba(168,168,168,1) 10%, rgba(204,204,204,1) 55%, rgba(204,204,204,1) 65%, rgba(168,168,168,1) 90%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(10%,rgba(168,168,168,1)), color-stop(55%,rgba(204,204,204,1)), color-stop(65%,rgba(204,204,204,1)), color-stop(90%,rgba(168,168,168,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgba(168,168,168,1) 10%,rgba(204,204,204,1) 55%,rgba(204,204,204,1) 65%,rgba(168,168,168,1) 90%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgba(168,168,168,1) 10%,rgba(204,204,204,1) 55%,rgba(204,204,204,1) 65%,rgba(168,168,168,1) 90%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgba(168,168,168,1) 10%,rgba(204,204,204,1) 55%,rgba(204,204,204,1) 65%,rgba(168,168,168,1) 90%); /* IE10+ */
+	background: linear-gradient(to right,  rgba(168,168,168,1) 10%,rgba(204,204,204,1) 55%,rgba(204,204,204,1) 65%,rgba(168,168,168,1) 90%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a8a8a8', endColorstr='#a8a8a8',GradientType=1 ); /* IE6-9 */
+
+	border: 2px solid #E6E6E6;
+		
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	
+	transition-property: border, width, transform;
+	transition-duration: 0ms;
+}
+
+td.we
+{
+	background-color: white;
+	width: 10%;
+	height: 100px;
+	
+	background: rgb(142,184,204); /* Old browsers */
+	background: -moz-linear-gradient(left,  rgba(142,184,204,1) 10%, rgba(153,207,219,1) 55%, rgba(153,207,219,1) 65%, rgba(142,184,204,1) 90%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(10%,rgba(142,184,204,1)), color-stop(55%,rgba(153,207,219,1)), color-stop(65%,rgba(153,207,219,1)), color-stop(90%,rgba(142,184,204,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgba(142,184,204,1) 10%,rgba(153,207,219,1) 55%,rgba(153,207,219,1) 65%,rgba(142,184,204,1) 90%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgba(142,184,204,1) 10%,rgba(153,207,219,1) 55%,rgba(153,207,219,1) 65%,rgba(142,184,204,1) 90%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgba(142,184,204,1) 10%,rgba(153,207,219,1) 55%,rgba(153,207,219,1) 65%,rgba(142,184,204,1) 90%); /* IE10+ */
+	background: linear-gradient(to right,  rgba(142,184,204,1) 10%,rgba(153,207,219,1) 55%,rgba(153,207,219,1) 65%,rgba(142,184,204,1) 90%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8eb8cc', endColorstr='#8eb8cc',GradientType=1 ); /* IE6-9 */
+
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	
+	transition-property: border, width, transform;
+	transition-duration: 0ms;
+	
+}
+
+td[id*="table_calendrier"]:hover
+{
+	-moz-box-shadow: 0 0 3px 3px #777;
+	-webkit-box-shadow: 0 0 3px 3px #777;
+	box-shadow: 0 0 3px 3px #777;
+	
+	transform: scale(1.1);
+	
+	transition-property: border, width, transform;
+	transition-duration: 500ms;
+}
+td[id*="table_calendrier"]:active
+{
+	-moz-box-shadow: 0 0 2px 2px #999;
+	-webkit-box-shadow: 0 0 2px 2px #999;
+	box-shadow: 0 0 2px 2px #999;
+	
+	transform: scale(4);
+	opacity: 0.8 !important;
+	
+	transition-property: border, width, transform;
+	transition-duration: 500ms;
+	transition-delay: 200ms;
+}
+
+td[id*="evenement_"]
+{
+	-moz-user-select: none; -khtml-user-select: none; user-select: none;
+}
+
+td[id*="astreinte_"]
+{
+	-moz-user-select: none; -khtml-user-select: none; user-select: none;
+}
+
+td[id="td_visuel_mois"]
+{
+    color: #729FCF;
+    font-size: 55px;
+    text-align: center;
+    vertical-align:top;
+}
+
+tr[id="joursSemaine"]
+{
+		color: black;
+		text-align: center;
+}
+
+

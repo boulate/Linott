@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendrier - Linott{% endblock %}
+
+{% block body %}
+{% include 'components/_navbar.html.twig' %}
+
+<div class="container mx-auto px-4 py-6">
+    {% include 'components/_flash_messages.html.twig' %}
+
+    <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Calendar Grid -->
+        <div class="flex-1">
+            <div id="calendar-container">
+                {% include 'calendrier/_month_grid.html.twig' %}
+            </div>
+        </div>
+
+        <!-- Sidebar: Counters + Form -->
+        <div class="w-full lg:w-80 space-y-6">
+            <!-- Compteurs -->
+            <div class="bg-white rounded-lg shadow p-4">
+                <h3 class="font-semibold text-gray-900 mb-4">Solde congés {{ year }}</h3>
+                {% include 'calendrier/_compteurs.html.twig' %}
+            </div>
+
+            <!-- New Leave Button -->
+            <button hx-get="{{ path('app_calendrier_conge_new') }}"
+                    hx-target="#conge-modal-content"
+                    hx-swap="innerHTML"
+                    @click="$dispatch('open-modal')"
+                    class="w-full bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">
+                + Nouveau congé
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for conge form -->
+<div x-data="{ open: false }"
+     @open-modal.window="open = true"
+     @close-modal.window="open = false"
+     @keydown.escape.window="open = false">
+    <div x-show="open"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black bg-opacity-50 z-40"
+         @click="open = false">
+    </div>
+    <div x-show="open"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="fixed inset-0 z-50 flex items-center justify-center p-4"
+         @click.self="open = false">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+             @click.stop>
+            <div id="conge-modal-content">
+                <!-- Form loaded via HTMX -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

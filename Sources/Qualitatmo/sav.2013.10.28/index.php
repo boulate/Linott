@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" >
+
+<head>
+	<title>Gestion des fiches de conformite</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link rel="stylesheet" media="screen" type="text/css" title="Design" href="first_design.css" />
+<link rel="icon" type="image/png" href="favicon.png" />
+</head>
+
+<body>
+
+
+
+<form method="post" action="valider_formulaire.php">
+
+
+<div id="header">
+	<?php include("header.php"); ?>
+</div>
+
+
+<div id="menu">
+	<?php include("menu.php"); ?>
+</div>
+
+
+<div id="corps">
+	<!-- SECTION Qui quand -->
+	<table border=5 align=center TABLE WIDTH=100%>
+		<tr>
+			<td width=90%>
+				Rédacteur:
+				<input type="text" name="redacteur"/>
+			</td>
+
+			<td align=center>
+				Date d'émission: <?php 
+							$dateEmission=date("d.m.Y");
+							echo"<br>$dateEmission";
+						?>
+			</td>
+		</tr>
+
+
+		<!-- SECTION nature -->
+		<tr align=center bgcolor=silver>
+			
+			<td colspan=2>
+				<h3>Nature:</h3>
+				<?php include("nature.php"); ?>
+			</td>
+		</tr>
+			
+
+		<!-- SECTION materiel -->
+		<tr>
+			<td colspan=2>
+			<?php include("materiel.php"); ?>
+			<td>
+		</tr>
+
+
+		<!-- SECTION description -->
+		<tr>
+			<td colspan=2>
+			<?php include("description.php"); ?>
+			<td>
+		</tr>
+
+
+		<!-- SECTION Analyse action -->
+		<tr>
+			<td colspan=2>
+			<?php include("analyse_action.php"); ?>
+			<td>
+		</tr>
+
+	</table>
+</div>
+
+<p align=center><br>
+	<input type="submit" value="Valider formulaire"/>
+</p>
+</form>
+</body>
+</html>
+
