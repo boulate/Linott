@@ -13,8 +13,8 @@ use App\Repository\Axe3Repository;
 use App\Repository\SectionRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use App\Form\Type\SplitTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -34,15 +34,12 @@ class PeriodeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('heureDebut', TimeType::class, [
+            ->add('heureDebut', SplitTimeType::class, [
                 'label' => 'Debut',
-                'widget' => 'single_text',
-                'attr' => ['class' => 'form-input'],
+                'autofocus' => true,
             ])
-            ->add('heureFin', TimeType::class, [
+            ->add('heureFin', SplitTimeType::class, [
                 'label' => 'Fin',
-                'widget' => 'single_text',
-                'attr' => ['class' => 'form-input'],
             ])
             ->add('section', EntityType::class, [
                 'class' => Section::class,
@@ -61,12 +58,11 @@ class PeriodeType extends AbstractType
                     'data-cascade' => 'section',
                 ],
             ])
-            ->add('commentaire', TextareaType::class, [
+            ->add('commentaire', TextType::class, [
                 'label' => 'Commentaire',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-input',
-                    'rows' => 2,
                 ],
             ]);
 

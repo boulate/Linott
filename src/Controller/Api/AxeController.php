@@ -29,6 +29,7 @@ class AxeController extends AbstractController
         if (!$sectionId) {
             return $this->render('compta/_select_placeholder.html.twig', [
                 'name' => 'periode[axe1]',
+                'label' => 'Axe 1',
                 'placeholder' => '-- Choisir d\'abord une section --',
                 'disabled' => true,
                 'dataAttribute' => 'axe1',
@@ -39,6 +40,7 @@ class AxeController extends AbstractController
 
         return $this->render('compta/_select_options.html.twig', [
             'name' => 'periode[axe1]',
+            'label' => 'Axe 1',
             'placeholder' => '-- Choisir un axe 1 --',
             'options' => $axes1,
             'dataAttribute' => 'axe1',
@@ -57,6 +59,7 @@ class AxeController extends AbstractController
         if (!$axe1Id) {
             return $this->render('compta/_select_placeholder.html.twig', [
                 'name' => 'periode[axe2]',
+                'label' => 'Axe 2',
                 'placeholder' => '-- Choisir d\'abord un axe 1 --',
                 'disabled' => true,
                 'dataAttribute' => 'axe2',
@@ -67,6 +70,7 @@ class AxeController extends AbstractController
 
         return $this->render('compta/_select_options.html.twig', [
             'name' => 'periode[axe2]',
+            'label' => 'Axe 2',
             'placeholder' => '-- Choisir un axe 2 --',
             'options' => $axes2,
             'dataAttribute' => 'axe2',
@@ -85,6 +89,7 @@ class AxeController extends AbstractController
         if (!$axe2Id) {
             return $this->render('compta/_select_placeholder.html.twig', [
                 'name' => 'periode[axe3]',
+                'label' => 'Axe 3',
                 'placeholder' => '-- Choisir d\'abord un axe 2 --',
                 'disabled' => true,
                 'dataAttribute' => 'axe3',
@@ -95,6 +100,7 @@ class AxeController extends AbstractController
 
         return $this->render('compta/_select_options.html.twig', [
             'name' => 'periode[axe3]',
+            'label' => 'Axe 3',
             'placeholder' => '-- Choisir un axe 3 --',
             'options' => $axes3,
             'dataAttribute' => 'axe3',

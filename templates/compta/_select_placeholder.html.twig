@@ -1,6 +1,11 @@
-<select name="{{ name }}"
-        class="form-select"
-        data-cascade="{{ dataAttribute|default('') }}"
-        {% if disabled|default(false) %}disabled{% endif %}>
-    <option value="">{{ placeholder }}</option>
-</select>
+{% if label is defined %}
+<label class="block text-sm font-medium text-gray-700 mb-3">{{ label }}</label>
+{% endif %}
+<div class="relative">
+    <select name="{{ name }}"
+            class="form-select w-full"
+            data-cascade="{{ dataAttribute|default('') }}"
+            {% if disabled|default(false) %}disabled{% endif %}>
+        <option value="">{{ placeholder }}</option>
+    </select>
+</div>

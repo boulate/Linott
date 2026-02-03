@@ -1,0 +1,41 @@
+{# Split Time Widget - Underline style (Material Design) #}
+{% block split_time_widget %}
+<div class="split-time-container inline-flex items-center gap-1"
+     x-data="splitTimeField()"
+     x-init="init()">
+    <div class="relative">
+        <input type="text"
+               inputmode="numeric"
+               id="{{ form.hour.vars.id }}"
+               name="{{ form.hour.vars.full_name }}"
+               value="{{ form.hour.vars.value }}"
+               maxlength="2"
+               placeholder="00"
+               {% if autofocus %}x-ref="autofocusField" data-autofocus="true"{% endif %}
+               x-ref="hour"
+               @input="onHourInput($event)"
+               @keydown="onKeydown($event, 'hour')"
+               @focus="$el.parentElement.classList.add('focused')"
+               @blur="$el.parentElement.classList.remove('focused')"
+               class="split-time-input split-time-hour w-10 bg-transparent border-0 border-b-2 border-gray-300 text-center text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-primary-500 transition-colors"
+               autocomplete="off">
+    </div>
+    <span class="text-gray-400 text-lg font-medium pb-0.5">:</span>
+    <div class="relative">
+        <input type="text"
+               inputmode="numeric"
+               id="{{ form.minute.vars.id }}"
+               name="{{ form.minute.vars.full_name }}"
+               value="{{ form.minute.vars.value is not null ? '%02d'|format(form.minute.vars.value) : '' }}"
+               maxlength="2"
+               placeholder="00"
+               x-ref="minute"
+               @input="onMinuteInput($event)"
+               @keydown="onKeydown($event, 'minute')"
+               @focus="$el.parentElement.classList.add('focused')"
+               @blur="$el.parentElement.classList.remove('focused')"
+               class="split-time-input split-time-minute w-10 bg-transparent border-0 border-b-2 border-gray-300 text-center text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-primary-500 transition-colors"
+               autocomplete="off">
+    </div>
+</div>
+{% endblock %}

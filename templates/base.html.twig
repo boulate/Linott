@@ -76,8 +76,109 @@
                         if (typeof Alpine !== 'undefined') {
                             Alpine.initTree(evt.detail.target);
                         }
+                        // Auto-focus on first autofocus field after HTMX swap
+                        setTimeout(function() {
+                            const autofocusField = evt.detail.target.querySelector('[data-autofocus="true"]');
+                            if (autofocusField) {
+                                autofocusField.focus();
+                                autofocusField.select();
+                            }
+                        }, 50);
                     });
                 });
+
+                // Alpine.js component for split time fields
+                function splitTimeField() {
+                    return {
+                        init() {
+                            // Auto-focus if this is the autofocus field
+                            if (this.$refs.autofocusField) {
+                                this.$nextTick(() => {
+                                    this.$refs.autofocusField.focus();
+                                    this.$refs.autofocusField.select();
+                                });
+                            }
+                        },
+                        onHourInput(event) {
+                            const input = event.target;
+                            // Only allow digits
+                            input.value = input.value.replace(/[^0-9]/g, '');
+
+                            // Validate range 0-23
+                            if (input.value !== '') {
+                                let val = parseInt(input.value, 10);
+                                if (val > 23) {
+                                    input.value = '23';
+                                }
+                            }
+
+                            // Auto-advance to minutes after 2 digits
+                            if (input.value.length >= 2) {
+                                this.$refs.minute.focus();
+                                this.$refs.minute.select();
+                            }
+                        },
+                        onMinuteInput(event) {
+                            const input = event.target;
+                            // Only allow digits
+                            input.value = input.value.replace(/[^0-9]/g, '');
+
+                            // Validate range 0-59
+                            if (input.value !== '') {
+                                let val = parseInt(input.value, 10);
+                                if (val > 59) {
+                                    input.value = '59';
+                                }
+                            }
+
+                            // Auto-advance to next field after 2 digits
+                            if (input.value.length >= 2) {
+                                // Find next focusable element
+                                const allInputs = Array.from(document.querySelectorAll(
+                                    'input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])'
+                                ));
+                                const currentIndex = allInputs.indexOf(input);
+                                if (currentIndex >= 0 && currentIndex < allInputs.length - 1) {
+                                    allInputs[currentIndex + 1].focus();
+                                    if (allInputs[currentIndex + 1].tagName === 'INPUT') {
+                                        allInputs[currentIndex + 1].select();
+                                    }
+                                }
+                            }
+                        },
+                        onKeydown(event, field) {
+                            const input = event.target;
+
+                            // Tab behavior is default - don't interfere
+                            if (event.key === 'Tab') {
+                                return;
+                            }
+
+                            // Arrow up/down to increment/decrement
+                            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                                event.preventDefault();
+                                let val = parseInt(input.value, 10) || 0;
+                                const max = field === 'hour' ? 23 : 59;
+
+                                if (event.key === 'ArrowUp') {
+                                    val = val >= max ? 0 : val + 1;
+                                } else {
+                                    val = val <= 0 ? max : val - 1;
+                                }
+
+                                input.value = field === 'minute' ? String(val).padStart(2, '0') : val;
+                                input.select();
+                            }
+
+                            // Backspace on empty minute field goes back to hour
+                            if (event.key === 'Backspace' && field === 'minute' && input.value === '') {
+                                event.preventDefault();
+                                this.$refs.hour.focus();
+                                this.$refs.hour.select();
+                            }
+                        }
+                    };
+                }
             </script>
         {% endblock %}
     </head>

@@ -27,7 +27,8 @@
                 'hx-post': form.vars.action,
                 'hx-target': '#fiche-container',
                 'hx-swap': 'innerHTML',
-                'hx-on::after-request': "if(event.detail.successful && event.detail.requestConfig.verb === 'post') document.getElementById('modal-container').innerHTML = ''"
+                'hx-on::after-request': "if(event.detail.successful && event.detail.requestConfig.verb === 'post') document.getElementById('modal-container').innerHTML = ''",
+                'onkeydown': "if(event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') { event.preventDefault(); this.requestSubmit(); }"
             }}) }}
 
             <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
@@ -35,60 +36,75 @@
                     {% if isEdit %}Modifier la periode{% else %}Nouvelle periode{% endif %}
                 </h3>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-4 mb-6">
                     <div>
-                        {{ form_label(form.heureDebut) }}
+                        {{ form_label(form.heureDebut, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
                         {{ form_widget(form.heureDebut) }}
                         {{ form_errors(form.heureDebut) }}
                     </div>
                     <div>
-                        {{ form_label(form.heureFin) }}
+                        {{ form_label(form.heureFin, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
                         {{ form_widget(form.heureFin) }}
                         {{ form_errors(form.heureFin) }}
                     </div>
                 </div>
 
-                <div>
-                    {{ form_label(form.section) }}
-                    {{ form_widget(form.section, {attr: {
-                        'hx-get': path('api_axes1'),
-                        'hx-target': '#axe1-container',
-                        'hx-include': 'this',
-                        'hx-trigger': 'change'
-                    }}) }}
+                <div class="mb-6" x-data="{ selected: false }" x-init="selected = $refs.select.value !== ''">
+                    {{ form_label(form.section, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+                    <div class="relative">
+                        {{ form_widget(form.section, {attr: {
+                            'x-ref': 'select',
+                            '@change': "selected = $el.value !== ''",
+                            'hx-get': path('api_axes1'),
+                            'hx-target': '#axe1-container',
+                            'hx-include': 'this',
+                            'hx-trigger': 'change'
+                        }}) }}
+                        <div x-show="selected" class="absolute right-8 top-1/2 -translate-y-1/2 text-green-500 pointer-events-none">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
                     {{ form_errors(form.section) }}
                 </div>
 
-                <div id="axe1-container">
-                    {{ form_label(form.axe1) }}
-                    {{ form_widget(form.axe1, {attr: {
-                        'hx-get': path('api_axes2'),
-                        'hx-target': '#axe2-container',
-                        'hx-include': 'this',
-                        'hx-trigger': 'change'
-                    }}) }}
+                <div id="axe1-container" class="mb-6">
+                    {{ form_label(form.axe1, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+                    <div class="relative">
+                        {{ form_widget(form.axe1, {attr: {
+                            'hx-get': path('api_axes2'),
+                            'hx-target': '#axe2-container',
+                            'hx-include': 'this',
+                            'hx-trigger': 'change'
+                        }}) }}
+                    </div>
                     {{ form_errors(form.axe1) }}
                 </div>
 
-                <div id="axe2-container">
-                    {{ form_label(form.axe2) }}
-                    {{ form_widget(form.axe2, {attr: {
-                        'hx-get': path('api_axes3'),
-                        'hx-target': '#axe3-container',
-                        'hx-include': 'this',
-                        'hx-trigger': 'change'
-                    }}) }}
+                <div id="axe2-container" class="mb-6">
+                    {{ form_label(form.axe2, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+                    <div class="relative">
+                        {{ form_widget(form.axe2, {attr: {
+                            'hx-get': path('api_axes3'),
+                            'hx-target': '#axe3-container',
+                            'hx-include': 'this',
+                            'hx-trigger': 'change'
+                        }}) }}
+                    </div>
                     {{ form_errors(form.axe2) }}
                 </div>
 
-                <div id="axe3-container">
-                    {{ form_label(form.axe3) }}
-                    {{ form_widget(form.axe3) }}
+                <div id="axe3-container" class="mb-6">
+                    {{ form_label(form.axe3, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
+                    <div class="relative">
+                        {{ form_widget(form.axe3) }}
+                    </div>
                     {{ form_errors(form.axe3) }}
                 </div>
 
                 <div>
-                    {{ form_label(form.commentaire) }}
+                    {{ form_label(form.commentaire, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-3'}}) }}
                     {{ form_widget(form.commentaire) }}
                     {{ form_errors(form.commentaire) }}
                 </div>
