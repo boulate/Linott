@@ -12,9 +12,9 @@ class AuthController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // If user is already logged in, redirect to dashboard
+        // If user is already logged in, redirect to compta
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_dashboard');
+            return $this->redirectToRoute('app_compta');
         }
 
         // Get the login error if there is one

@@ -3,14 +3,10 @@
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <a href="{{ path('app_dashboard') }}" class="text-2xl">⏱️</a>
+                    <a href="{{ path('app_compta') }}" class="text-2xl">⏱️</a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="{{ path('app_dashboard') }}"
-                           class="{% if current|default('') == 'dashboard' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
-                            Tableau de bord
-                        </a>
                         <a href="{{ path('app_compta') }}"
                            class="{% if current|default('') == 'compta' %}bg-primary-900 text-white{% else %}text-gray-300 hover:bg-primary-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">
                             Compta
