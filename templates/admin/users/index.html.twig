@@ -25,7 +25,8 @@
                 <tr>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Nom</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Email</th>
-                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Rôles</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Equipes</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500">Roles</th>
                     <th class="px-4 py-3 text-center text-sm font-medium text-gray-500">Statut</th>
                     <th class="px-4 py-3 text-right text-sm font-medium text-gray-500">Actions</th>
                 </tr>
@@ -37,6 +38,26 @@
                             <span class="font-medium text-gray-900">{{ user.fullName }}</span>
                         </td>
                         <td class="px-4 py-3 text-gray-600">{{ user.email }}</td>
+                        <td class="px-4 py-3">
+                            {% if user.equipes|length > 0 %}
+                                <div class="flex flex-wrap gap-1">
+                                    {% for equipe in user.equipes %}
+                                        {% if equipe.couleur %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border"
+                                                  style="{{ equipe.couleurStyle }}">
+                                                {{ equipe.code }}
+                                            </span>
+                                        {% else %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                                {{ equipe.code }}
+                                            </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <span class="text-gray-400 text-sm">-</span>
+                            {% endif %}
+                        </td>
                         <td class="px-4 py-3">
                             {% for role in user.roles %}
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if role == 'ROLE_ADMIN' %}bg-red-100 text-red-800{% else %}bg-gray-100 text-gray-800{% endif %}">
@@ -75,7 +96,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="5" class="px-4 py-8 text-center text-gray-500">
+                        <td colspan="6" class="px-4 py-8 text-center text-gray-500">
                             Aucun utilisateur
                         </td>
                     </tr>

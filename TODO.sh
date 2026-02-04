@@ -8,7 +8,7 @@
 #1F1 : Le nom "Compta" n'a pas de sens pour l'onglet principal. Renomons le "Ventilation analytique"
 2F2 : Ajouter des couleurs par sections. Les axes qui en découlent conservent ces couleurs. Proposer des couleurs par défaut (comme les labels, souvent utilisés dans notion ou autre), et proposer de créer d'autres couleurs également pour chaque section.
 #1F3 : Les filtres ne doivent pas être excluants dans la selection des axes si je n'en ai pas selectionné plus en amont. Exemple : Tous les axes3 doivent apparaitre si je n'ai pas pris d'axe2, tous les axes2 apparaissent si je n'ai pas selectionné d'axe1, etc.
-1F2 : Je veux pouvoir changer les noms "Section, axe1, axe2 et axe3" dans l'adminitration, pour pouvoir coller au vocabulaire métier.
+#1F2 : Je veux pouvoir changer les noms "Section, axe1, axe2 et axe3" dans l'adminitration, pour pouvoir coller au vocabulaire métier.
 2F3 : Pouvoir avoir des codes comptables sur chaque section et chaque axe. Exemple : 23456 pour l'axe3 "Toto". Possibilité de selectionner l'axe en tapant directement son code comptable.
 2F2 : Je veux pouvoir faire des équipes, et les utilisateurs doivent pouvoir faire partie d'une équipe (compta, TOOLIB, prod, etc.). Une équipe peut avoir plusieurs utilisateurs, et un utilisateur peut être dans plusieurs équipe.
 2F3 : Dans les stats, il nous faut des filtres croisés pour pouvoir isoler les heures par personne, par équipe, par équipe sur un projet, par équipe sur un couple "Axe1 et axe2", etc.

@@ -2,7 +2,10 @@
 
 namespace App\Form\Admin;
 
+use App\Entity\Equipe;
 use App\Entity\User;
+use App\Repository\EquipeRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -64,6 +67,19 @@ class UserType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+            ])
+            ->add('equipes', EntityType::class, [
+                'class' => Equipe::class,
+                'choice_label' => fn(Equipe $equipe) => $equipe->getCode() . ' - ' . $equipe->getNom(),
+                'query_builder' => fn(EquipeRepository $repo) => $repo->createQueryBuilder('e')
+                    ->where('e.actif = :actif')
+                    ->setParameter('actif', true)
+                    ->orderBy('e.nom', 'ASC'),
+                'label' => 'Equipes',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false,
+                'by_reference' => false,
             ]);
     }
 
