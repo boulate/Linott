@@ -57,116 +57,176 @@
         </div>
     </div>
 
-    <!-- Admin menu -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a href="{{ path('app_admin_users') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
-                    </svg>
+    <!-- Section: Utilisateurs et equipes -->
+    <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+            </svg>
+            Utilisateurs et equipes
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="{{ path('app_admin_users') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Utilisateurs</h3>
+                        <p class="text-sm text-gray-500">Gerer les comptes utilisateurs</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Utilisateurs</h3>
-            <p class="text-sm text-gray-500">Gérer les comptes utilisateurs</p>
-        </a>
+            </a>
 
-        <a href="{{ path('app_admin_equipes') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
+            <a href="{{ path('app_admin_equipes') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Equipes</h3>
+                        <p class="text-sm text-gray-500">Gerer les equipes et leurs membres</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Equipes</h3>
-            <p class="text-sm text-gray-500">Gerer les equipes et leurs membres</p>
-        </a>
+            </a>
+        </div>
+    </div>
 
-        <a href="{{ path('app_admin_sections') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                    </svg>
+    <!-- Section: Ventilation analytique -->
+    <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+            </svg>
+            Ventilation analytique
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="{{ path('app_admin_sections') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-green-100 text-green-600 group-hover:bg-green-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Sections</h3>
+                        <p class="text-sm text-gray-500">Gerer les sections analytiques</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Sections</h3>
-            <p class="text-sm text-gray-500">Gérer les sections analytiques</p>
-        </a>
+            </a>
 
-        <a href="{{ path('app_admin_axes') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
-                    </svg>
+            <a href="{{ path('app_admin_axes') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-green-100 text-green-600 group-hover:bg-green-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Axes analytiques</h3>
+                        <p class="text-sm text-gray-500">Gerer la hierarchie des axes</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Axes analytiques</h3>
-            <p class="text-sm text-gray-500">Gérer la hiérarchie des axes</p>
-        </a>
+            </a>
 
-        <a href="{{ path('app_admin_types_conge') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                    </svg>
+            <a href="{{ path('app_admin_labels') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-green-100 text-green-600 group-hover:bg-green-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Noms des axes</h3>
+                        <p class="text-sm text-gray-500">Personnaliser le vocabulaire metier</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Types de conges</h3>
-            <p class="text-sm text-gray-500">Gerer les types de conges</p>
-        </a>
+            </a>
+        </div>
+    </div>
 
-        <a href="{{ path('app_admin_jour_types') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
+    <!-- Section: Conges et modeles -->
+    <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Conges et modeles
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="{{ path('app_admin_types_conge') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-amber-100 text-amber-600 group-hover:bg-amber-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Types de conges</h3>
+                        <p class="text-sm text-gray-500">Gerer les types de conges</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Modeles de journee</h3>
-            <p class="text-sm text-gray-500">Modeles partages pour tous les utilisateurs</p>
-        </a>
+            </a>
 
-        <a href="{{ path('app_admin_modules') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
-                    </svg>
+            <a href="{{ path('app_admin_jour_types') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-amber-100 text-amber-600 group-hover:bg-amber-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Modeles de journee</h3>
+                        <p class="text-sm text-gray-500">Modeles partages pour tous les utilisateurs</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Modules</h3>
-            <p class="text-sm text-gray-500">Activer/desactiver les fonctionnalites</p>
-        </a>
+            </a>
+        </div>
+    </div>
 
-        <a href="{{ path('app_admin_labels') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                    </svg>
+    <!-- Section: Configuration -->
+    <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Configuration
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="{{ path('app_admin_modules') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-purple-100 text-purple-600 group-hover:bg-purple-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Modules</h3>
+                        <p class="text-sm text-gray-500">Activer/desactiver les fonctionnalites</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Noms des axes</h3>
-            <p class="text-sm text-gray-500">Personnaliser le vocabulaire metier</p>
-        </a>
+            </a>
 
-        <a href="{{ path('app_admin_configuration') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow group">
-            <div class="flex items-center mb-4">
-                <div class="p-3 rounded-lg bg-primary-100 text-primary-600 group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
+            <a href="{{ path('app_admin_configuration') }}" class="bg-white rounded-lg shadow p-5 hover:shadow-md transition-shadow group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-purple-100 text-purple-600 group-hover:bg-purple-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Configuration</h3>
+                        <p class="text-sm text-gray-500">Parametres systeme</p>
+                    </div>
                 </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-1">Configuration</h3>
-            <p class="text-sm text-gray-500">Parametres systeme</p>
-        </a>
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}
