@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Axes analytiques - Administration - Linott{% endblock %}
+{% block title %}Sections et axes - Administration - Linott{% endblock %}
 
 {% block body %}
 {% include 'components/_navbar.html.twig' %}
@@ -10,192 +10,96 @@
 
     <div class="mb-6">
         <a href="{{ path('app_admin') }}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Administration</a>
-        <h1 class="text-2xl font-bold text-gray-900">Axes analytiques</h1>
+        <h1 class="text-2xl font-bold text-gray-900">Sections et axes analytiques</h1>
     </div>
 
-    <!-- Section filter -->
-    <div class="bg-white rounded-lg shadow p-4 mb-6">
-        <form method="get" class="flex flex-wrap items-end gap-4">
-            <div>
-                <label for="section" class="block text-sm font-medium text-gray-700 mb-1">{{ axe_label('section') }}</label>
-                <select name="section" id="section"
-                        onchange="this.form.submit()"
-                        class="rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                    {% for section in sections %}
-                        <option value="{{ section.id }}" {% if selectedSection and selectedSection.id == section.id %}selected{% endif %}>
-                            {{ section.code }} - {{ section.libelle }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-        </form>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Axe 1 -->
-        <div class="bg-white rounded-lg shadow">
-            <div class="px-4 py-3 border-b bg-gray-50">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-gray-900">{{ axe_label('axe1') }}</h3>
-                    {% if selectedSection %}
-                        <a href="{{ path('app_admin_axe1_new', {section: selectedSection.id}) }}"
-                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                            + Ajouter
-                        </a>
-                    {% elseif not axe1InheritsSection %}
-                        <a href="{{ path('app_admin_axe1_new') }}"
-                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                            + Ajouter
-                        </a>
-                    {% endif %}
-                </div>
-                <form method="post" action="{{ path('app_admin_axes_toggle_inheritance', {level: 'axe1'}) }}" class="mt-2">
-                    <button type="submit" class="text-xs flex items-center gap-1 {% if axe1InheritsSection %}text-green-600{% else %}text-gray-400{% endif %}">
-                        {% if axe1InheritsSection %}
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                            Filtre par {{ axe_label('section') }}
-                        {% else %}
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                            Independant
-                        {% endif %}
-                    </button>
-                </form>
-            </div>
-            <div class="divide-y divide-gray-200">
-                {% for axe1 in axes1 %}
-                    <div class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
-                        <a href="{{ path('app_admin_axes', {section: selectedSection.id, axe1: axe1.id}) }}"
-                           class="flex-1 {% if selectedAxe1 and selectedAxe1.id == axe1.id %}text-primary-600 font-medium{% else %}text-gray-900{% endif %}">
-                            <span class="font-mono">{{ axe1.code }}</span>
-                            <span class="text-gray-500 ml-1">{{ axe1.libelle }}</span>
-                        </a>
-                        <a href="{{ path('app_admin_axe1_edit', {id: axe1.id}) }}"
-                           class="text-gray-400 hover:text-gray-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+    <div class="flex gap-6">
+        {# Left panel: Tree view #}
+        <div class="flex-1 bg-white rounded-lg shadow">
+            {# Header with search and add button #}
+            <div class="px-4 py-3 border-b bg-gray-50 rounded-t-lg">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <input type="text"
+                                   id="tree-search"
+                                   name="q"
+                                   placeholder="Rechercher..."
+                                   hx-get="{{ path('app_admin_axes_search') }}"
+                                   hx-trigger="input changed delay:300ms, search"
+                                   hx-target="#tree-container"
+                                   hx-swap="outerHTML"
+                                   class="w-full pl-9 pr-4 py-2 text-sm rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
-                        </a>
-                    </div>
-                {% else %}
-                    <div class="px-4 py-8 text-center text-gray-500 text-sm">
-                        {% if selectedSection %}
-                            Aucun {{ axe_label('axe1')|lower }} pour cette {{ axe_label('section')|lower }}
-                        {% else %}
-                            Selectionnez une {{ axe_label('section')|lower }}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Axe 2 -->
-        <div class="bg-white rounded-lg shadow">
-            <div class="px-4 py-3 border-b bg-gray-50">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-gray-900">{{ axe_label('axe2') }}</h3>
-                    {% if selectedAxe1 %}
-                        <a href="{{ path('app_admin_axe2_new', {axe1: selectedAxe1.id}) }}"
-                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                            + Ajouter
-                        </a>
-                    {% elseif not axe2InheritsAxe1 %}
-                        <a href="{{ path('app_admin_axe2_new') }}"
-                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                            + Ajouter
-                        </a>
-                    {% endif %}
-                </div>
-                <form method="post" action="{{ path('app_admin_axes_toggle_inheritance', {level: 'axe2'}) }}" class="mt-2">
-                    <button type="submit" class="text-xs flex items-center gap-1 {% if axe2InheritsAxe1 %}text-green-600{% else %}text-gray-400{% endif %}">
-                        {% if axe2InheritsAxe1 %}
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                            Filtre par {{ axe_label('axe1') }}
-                        {% else %}
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                            Independant
-                        {% endif %}
-                    </button>
-                </form>
-            </div>
-            <div class="divide-y divide-gray-200">
-                {% for axe2 in axes2 %}
-                    <div class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
-                        <a href="{{ path('app_admin_axes', {section: selectedSection.id, axe1: selectedAxe1.id, axe2: axe2.id}) }}"
-                           class="flex-1 {% if selectedAxe2 and selectedAxe2.id == axe2.id %}text-primary-600 font-medium{% else %}text-gray-900{% endif %}">
-                            <span class="font-mono">{{ axe2.code }}</span>
-                            <span class="text-gray-500 ml-1">{{ axe2.libelle }}</span>
-                        </a>
-                        <a href="{{ path('app_admin_axe2_edit', {id: axe2.id}) }}"
-                           class="text-gray-400 hover:text-gray-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                            </svg>
-                        </a>
-                    </div>
-                {% else %}
-                    <div class="px-4 py-8 text-center text-gray-500 text-sm">
-                        {% if selectedAxe1 %}
-                            Aucun {{ axe_label('axe2')|lower }} pour cet {{ axe_label('axe1')|lower }}
-                        {% else %}
-                            Selectionnez un {{ axe_label('axe1')|lower }}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Axe 3 -->
-        <div class="bg-white rounded-lg shadow">
-            <div class="px-4 py-3 border-b bg-gray-50">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-gray-900">{{ axe_label('axe3') }}</h3>
-                    {% if selectedAxe2 %}
-                        <a href="{{ path('app_admin_axe3_new', {axe2: selectedAxe2.id}) }}"
-                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                            + Ajouter
-                        </a>
-                    {% elseif not axe3InheritsAxe2 %}
-                        <a href="{{ path('app_admin_axe3_new') }}"
-                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                            + Ajouter
-                        </a>
-                    {% endif %}
-                </div>
-                <form method="post" action="{{ path('app_admin_axes_toggle_inheritance', {level: 'axe3'}) }}" class="mt-2">
-                    <button type="submit" class="text-xs flex items-center gap-1 {% if axe3InheritsAxe2 %}text-green-600{% else %}text-gray-400{% endif %}">
-                        {% if axe3InheritsAxe2 %}
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                            Filtre par {{ axe_label('axe2') }}
-                        {% else %}
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                            Independant
-                        {% endif %}
-                    </button>
-                </form>
-            </div>
-            <div class="divide-y divide-gray-200">
-                {% for axe3 in axes3 %}
-                    <div class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
-                        <div class="flex-1 text-gray-900">
-                            <span class="font-mono">{{ axe3.code }}</span>
-                            <span class="text-gray-500 ml-1">{{ axe3.libelle }}</span>
                         </div>
-                        <a href="{{ path('app_admin_axe3_edit', {id: axe3.id}) }}"
-                           class="text-gray-400 hover:text-gray-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                            </svg>
-                        </a>
                     </div>
-                {% else %}
-                    <div class="px-4 py-8 text-center text-gray-500 text-sm">
-                        {% if selectedAxe2 %}
-                            Aucun {{ axe_label('axe3')|lower }} pour cet {{ axe_label('axe2')|lower }}
-                        {% else %}
-                            Selectionnez un {{ axe_label('axe2')|lower }}
-                        {% endif %}
-                    </div>
-                {% endfor %}
+                    <button type="button"
+                            hx-get="{{ path('app_admin_axes_panel_new', {level: 'section'}) }}"
+                            hx-target="#side-panel"
+                            hx-swap="innerHTML"
+                            class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Nouvelle section
+                    </button>
+                </div>
+
+                {# Inheritance toggles #}
+                <div class="mt-3 flex flex-wrap items-center gap-4 text-xs">
+                    <span class="text-gray-500">Heritage :</span>
+
+                    <form method="post" action="{{ path('app_admin_axes_toggle_inheritance', {level: 'axe1'}) }}" class="inline">
+                        <button type="submit" class="flex items-center gap-1 px-2 py-1 rounded {{ tree.inheritance.axe1InheritsSection ? 'text-green-700 bg-green-50' : 'text-gray-500 bg-gray-100' }} hover:opacity-80 transition-opacity">
+                            {% if tree.inheritance.axe1InheritsSection %}
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                            {% else %}
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                            {% endif %}
+                            {{ axe_label('section') }} &rarr; {{ axe_label('axe1') }}
+                        </button>
+                    </form>
+
+                    <form method="post" action="{{ path('app_admin_axes_toggle_inheritance', {level: 'axe2'}) }}" class="inline">
+                        <button type="submit" class="flex items-center gap-1 px-2 py-1 rounded {{ tree.inheritance.axe2InheritsAxe1 ? 'text-green-700 bg-green-50' : 'text-gray-500 bg-gray-100' }} hover:opacity-80 transition-opacity">
+                            {% if tree.inheritance.axe2InheritsAxe1 %}
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                            {% else %}
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                            {% endif %}
+                            {{ axe_label('axe1') }} &rarr; {{ axe_label('axe2') }}
+                        </button>
+                    </form>
+
+                    <form method="post" action="{{ path('app_admin_axes_toggle_inheritance', {level: 'axe3'}) }}" class="inline">
+                        <button type="submit" class="flex items-center gap-1 px-2 py-1 rounded {{ tree.inheritance.axe3InheritsAxe2 ? 'text-green-700 bg-green-50' : 'text-gray-500 bg-gray-100' }} hover:opacity-80 transition-opacity">
+                            {% if tree.inheritance.axe3InheritsAxe2 %}
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                            {% else %}
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                            {% endif %}
+                            {{ axe_label('axe2') }} &rarr; {{ axe_label('axe3') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {# Tree content #}
+            <div class="p-2 max-h-[calc(100vh-300px)] overflow-y-auto">
+                {% include 'admin/axes/_tree.html.twig' %}
+            </div>
+        </div>
+
+        {# Right panel: Edit form (initially empty) #}
+        <div id="side-panel" class="w-96 flex-shrink-0">
+            {# Empty state #}
+            <div class="bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 p-8 text-center">
+                <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                </svg>
+                <p class="text-sm text-gray-500">Selectionnez un element pour le modifier ou cliquez sur + pour en ajouter un nouveau</p>
             </div>
         </div>
     </div>
